@@ -753,6 +753,30 @@ select#inp-plan {
 html { -webkit-text-size-adjust: 100%; }
 input, select, button { font-size: 16px; } /* avoid iOS zoom on focus */
 
+
+.sheet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  margin-top: 12px;
+}
+.sheet-actions .btn {
+  min-height: 48px;
+  -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+}
+.sheet-link {
+  color: inherit;
+  text-decoration: underline;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+}
+#sheet-load-status {
+  margin-top: 8px;
+  font-size: 0.95rem;
+}
+
   </style>
 </head>
 <body>
@@ -794,6 +818,11 @@ input, select, button { font-size: 16px; } /* avoid iOS zoom on focus */
           <div>如需檢查或更新保費表及計劃名單，請前往「更新保費表 / 計劃」頁面，並在完成後寫上今天日期。</div>
           <div class="en">To review or update premium tables and plans, open the update page, then record today’s date when you are done.</div>
         </div>
+        <div class="sheet-actions">
+          <button type="button" class="btn btn-update" id="btn-reload-sheet">由 Google 試算表重新載入 / Reload from Google Sheet</button>
+          <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1BEs1-K0jV5W8uD8s2JB3XP4We5LNH08n/edit?usp=share_link" target="_blank" rel="noopener">開啟試算表 / Open sheet</a>
+        </div>
+        <p id="sheet-load-status"></p>
         <a class="btn btn-update" href="#/admin" id="btn-admin">更新保費表 / 計劃</a>
       </div>
 
@@ -1140,6 +1169,7 @@ input, select, button { font-size: 16px; } /* avoid iOS zoom on focus */
 
   <div id="toast" class="toast" role="status"></div>
 
+  
   
   
   <script>
@@ -1505,6 +1535,310 @@ window.DEFAULT_DATA = {"version":"3.0-web","sourceNote":"Extracted from the user
 
   </script>
   <script>
+/* Load premium tables from a public Google Sheet (JSONP, works from file://). */
+(function (root) {
+  "use strict";
+
+  var SHEET_ID = "1BEs1-K0jV5W8uD8s2JB3XP4We5LNH08n";
+  var SHEET_EDIT_URL =
+    "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/edit?usp=share_link";
+  var TABLE_KEYS = ["Male", "Male_Rider", "Female", "Female_Rider"];
+  var TABLE_TITLES = {
+    Male: "Male (Plan)",
+    Male_Rider: "Male Rider (Plan)",
+    Female: "Female (Plan)",
+    Female_Rider: "Female Rider (Plan)",
+  };
+  var RANGE_RATES = "A3:AZ120";
+  var RANGE_MENU = "B3:B40";
+
+  function cellAt(row, index) {
+    if (!row || !row.c || index >= row.c.length) return null;
+    return row.c[index];
+  }
+
+  function cellValue(cell) {
+    if (!cell || cell.v === null || cell.v === undefined) return null;
+    return cell.v;
+  }
+
+  function pad2(n) {
+    return String(n).padStart(2, "0");
+  }
+
+  function isoFromYmd(y, m, d) {
+    if (!y || !m || !d) return null;
+    return y + "-" + pad2(m) + "-" + pad2(d);
+  }
+
+  function toIsoDate(cell) {
+    if (!cell) return null;
+    var f = cell.f;
+    if (typeof f === "string") {
+      var fm = f.trim().match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+      if (fm) return isoFromYmd(+fm[1], +fm[2], +fm[3]);
+    }
+    var v = cell.v;
+    if (typeof v === "string") {
+      var dm = v.trim().match(/^Date\((\d+),(\d+),(\d+)/);
+      if (dm) return isoFromYmd(+dm[1], +dm[2] + 1, +dm[3]);
+      var sm = v.trim().match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+      if (sm) return isoFromYmd(+sm[1], +sm[2], +sm[3]);
+    }
+    if (typeof v === "number" && isFinite(v) && v > 20000 && v < 80000) {
+      var utc = new Date(Date.UTC(1899, 11, 30) + Math.round(v) * 86400000);
+      return isoFromYmd(utc.getUTCFullYear(), utc.getUTCMonth() + 1, utc.getUTCDate());
+    }
+    return null;
+  }
+
+  function asRate(cell) {
+    if (!cell) return null;
+    var v = cell.v;
+    if (typeof v === "number" && isFinite(v)) {
+      // Skip Excel date serials sitting in rate columns (effective-date row).
+      if (v > 20000 && v < 80000 && cell.f && /^\d{4}\//.test(String(cell.f))) return null;
+      return v;
+    }
+    if (typeof v === "string" && v.trim() !== "") {
+      var n = Number(String(v).replace(/,/g, "").trim());
+      return isFinite(n) ? n : null;
+    }
+    return null;
+  }
+
+  function parseGvizText(text) {
+    if (!text) throw new Error("empty response");
+    var t = String(text).replace(/^\uFEFF/, "").trim();
+    var m = t.match(/^[^{\[]*\((\{[\s\S]*\})\)\s*;?\s*$/);
+    if (!m) m = t.match(/setResponse\((\{[\s\S]*\})\)/);
+    if (!m) throw new Error("unrecognised Google Sheet response");
+    return JSON.parse(m[1]);
+  }
+
+  function parseMenu(payload) {
+    if (!payload || payload.status !== "ok" || !payload.table) {
+      throw new Error("Menu 讀取失敗");
+    }
+    var menu = [];
+    (payload.table.rows || []).forEach(function (row) {
+      var v = cellValue(cellAt(row, 0));
+      if (v == null) return;
+      var s = String(v).trim();
+      if (s) menu.push(s);
+    });
+    if (!menu.length) throw new Error("Menu 分頁沒有計劃名單（預期 B3 起）。");
+    return menu;
+  }
+
+  function parseRateSheet(name, payload) {
+    if (!payload || payload.status !== "ok" || !payload.table) {
+      throw new Error(name + " 讀取失敗");
+    }
+    var cols = payload.table.cols || [];
+    var rows = payload.table.rows || [];
+    var headers = [];
+    for (var i = 2; i < cols.length; i++) {
+      var label = cols[i] && cols[i].label != null ? String(cols[i].label) : "";
+      if (label.trim() === "") continue;
+      headers.push({ index: i, name: label });
+    }
+    if (!headers.length) throw new Error(name + " 第 3 列沒有計劃標題。");
+
+    var plans = {};
+    var planOrder = [];
+    headers.forEach(function (h) {
+      plans[h.name] = { rates: {}, effectiveDate: null, groupHeader: null };
+      planOrder.push(h.name);
+    });
+
+    var lastChecked = null;
+    rows.forEach(function (row) {
+      var ageCell = cellAt(row, 0);
+      var ageVal = cellValue(ageCell);
+      var age = null;
+      if (typeof ageVal === "number" && isFinite(ageVal)) age = Math.round(ageVal);
+      else if (typeof ageVal === "string" && ageVal.trim() !== "" && isFinite(Number(ageVal))) {
+        age = Math.round(Number(ageVal));
+      }
+
+      if (age != null && age >= 0 && age <= 99) {
+        headers.forEach(function (h) {
+          var rate = asRate(cellAt(row, h.index));
+          if (rate != null) plans[h.name].rates[String(age)] = rate;
+        });
+        return;
+      }
+
+      // Non-age rows: effective dates (several plan columns) or last-checked (usually D only).
+      var dateCols = [];
+      headers.forEach(function (h) {
+        if (toIsoDate(cellAt(row, h.index))) dateCols.push(h.index);
+      });
+      var d3 = toIsoDate(cellAt(row, 3));
+      var onlyLastChecked = dateCols.length === 1 && dateCols[0] === 3;
+      if (onlyLastChecked || (dateCols.length === 0 && d3)) {
+        if (d3 && !lastChecked) lastChecked = d3;
+        return;
+      }
+      if (!dateCols.length) return;
+
+      var lastEd = null;
+      headers.forEach(function (h) {
+        var ed = toIsoDate(cellAt(row, h.index));
+        if (ed) lastEd = ed;
+        if (lastEd) plans[h.name].effectiveDate = ed || lastEd;
+      });
+    });
+
+    return {
+      title: TABLE_TITLES[name] || name,
+      lastChecked: lastChecked,
+      plans: plans,
+      planOrder: planOrder,
+    };
+  }
+
+  function buildData(payloads, bundled) {
+    var menu = parseMenu(payloads.Menu);
+    var tables = {};
+    var lastCheckedCandidates = [];
+    TABLE_KEYS.forEach(function (name) {
+      tables[name] = parseRateSheet(name, payloads[name]);
+      if (tables[name].lastChecked) lastCheckedCandidates.push(tables[name].lastChecked);
+    });
+    var lastChecked = lastCheckedCandidates[0] || (bundled && bundled.lastChecked) || null;
+    var base = bundled || {};
+    return {
+      version: base.version || "3.0-web",
+      sourceNote: "Loaded from Google Sheet " + SHEET_ID,
+      lastChecked: lastChecked,
+      menu: menu,
+      defaults: base.defaults || {},
+      reminderPlans: base.reminderPlans || [],
+      tables: tables,
+    };
+  }
+
+  function gvizUrl(sheet, range, callbackName) {
+    var url =
+      "https://docs.google.com/spreadsheets/d/" +
+      SHEET_ID +
+      "/gviz/tq?sheet=" +
+      encodeURIComponent(sheet) +
+      "&range=" +
+      encodeURIComponent(range) +
+      "&_=" +
+      Date.now();
+    if (callbackName) {
+      url += "&tqx=" + encodeURIComponent("out:json;responseHandler:" + callbackName);
+    } else {
+      url += "&tqx=" + encodeURIComponent("out:json");
+    }
+    return url;
+  }
+
+  function loadGvizJsonp(sheet, range, timeoutMs) {
+    return new Promise(function (resolve, reject) {
+      if (typeof document === "undefined") {
+        reject(new Error("JSONP is not available"));
+        return;
+      }
+      var cbName = "AIA_GS_" + Math.random().toString(36).slice(2);
+      var script = document.createElement("script");
+      var done = false;
+      var timer = setTimeout(function () {
+        cleanup();
+        reject(new Error("timeout loading " + sheet));
+      }, timeoutMs || 8000);
+
+      function cleanup() {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        try {
+          delete root[cbName];
+        } catch (e) {
+          root[cbName] = undefined;
+        }
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      root[cbName] = function (payload) {
+        cleanup();
+        resolve(payload);
+      };
+      script.onerror = function () {
+        cleanup();
+        reject(new Error("script error loading " + sheet));
+      };
+      script.src = gvizUrl(sheet, range, cbName);
+      script.async = true;
+      (document.head || document.documentElement).appendChild(script);
+    });
+  }
+
+  function loadGvizFetch(sheet, range, timeoutMs) {
+    var ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    var timer = setTimeout(function () {
+      if (ctrl) ctrl.abort();
+    }, timeoutMs || 8000);
+    return fetch(gvizUrl(sheet, range, null), {
+      cache: "no-store",
+      signal: ctrl ? ctrl.signal : undefined,
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error(sheet + " HTTP " + res.status);
+        return res.text();
+      })
+      .then(function (text) {
+        return parseGvizText(text);
+      })
+      .finally(function () {
+        clearTimeout(timer);
+      });
+  }
+
+  function loadOne(sheet, range, timeoutMs) {
+    return loadGvizJsonp(sheet, range, timeoutMs).catch(function () {
+      return loadGvizFetch(sheet, range, timeoutMs);
+    });
+  }
+
+  function loadAll(bundled, timeoutMs) {
+    var jobs = {
+      Menu: loadOne("Menu", RANGE_MENU, timeoutMs),
+    };
+    TABLE_KEYS.forEach(function (name) {
+      jobs[name] = loadOne(name, RANGE_RATES, timeoutMs);
+    });
+    var keys = Object.keys(jobs);
+    return Promise.all(keys.map(function (k) { return jobs[k]; })).then(function (values) {
+      var payloads = {};
+      keys.forEach(function (k, i) {
+        payloads[k] = values[i];
+      });
+      return buildData(payloads, bundled);
+    });
+  }
+
+  root.AIASheets = {
+    SHEET_ID: SHEET_ID,
+    SHEET_EDIT_URL: SHEET_EDIT_URL,
+    parseGvizText: parseGvizText,
+    parseMenu: parseMenu,
+    parseRateSheet: parseRateSheet,
+    buildData: buildData,
+    loadAll: loadAll,
+  };
+
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = root.AIASheets;
+  }
+})(typeof window !== "undefined" ? window : globalThis);
+
+  </script>
+  <script>
 /* AIA 醫療儲備計劃 — UI */
 (function () {
   "use strict";
@@ -1517,6 +1851,7 @@ window.DEFAULT_DATA = {"version":"3.0-web","sourceNote":"Extracted from the user
   let DATA = null;
   let dataSource = "default";
   let pendingImport = null;
+  let sheetLoadError = "";
 
   const $ = function (id) {
     return document.getElementById(id);
@@ -1643,11 +1978,22 @@ window.DEFAULT_DATA = {"version":"3.0-web","sourceNote":"Extracted from the user
 
   function updateDataSourceLabel() {
     const map = {
+      google: "保費表來源：Google 試算表",
       server: "保費表來源：伺服器",
       localStorage: "保費表來源：本機暫存",
       default: "保費表來源：內建資料",
     };
     $("data-source-label").textContent = map[dataSource] || "";
+    const status = $("sheet-load-status");
+    if (status) {
+      if (dataSource === "google") {
+        status.textContent = "已從 Google 試算表載入保費表。 / Loaded from Google Sheet.";
+      } else if (sheetLoadError) {
+        status.textContent = "未能連接 Google 試算表，已用備用資料。 / Could not reach the Google Sheet; using saved tables.";
+      } else {
+        status.textContent = "";
+      }
+    }
   }
 
   function collectInputs() {
@@ -2269,7 +2615,42 @@ window.DEFAULT_DATA = {"version":"3.0-web","sourceNote":"Extracted from the user
     }
   }
 
+  async function loadFromGoogleSheet() {
+    if (!window.AIASheets || !window.AIASheets.loadAll) {
+      throw new Error("sheets loader missing");
+    }
+    const data = await window.AIASheets.loadAll(window.DEFAULT_DATA, 8000);
+    if (!data || !data.tables || !data.menu) throw new Error("empty sheet data");
+    DATA = data;
+    dataSource = "google";
+    sheetLoadError = "";
+    persistDataLocal();
+  }
+
+  async function reloadFromGoogleSheet() {
+    const status = $("sheet-load-status");
+    if (status) status.textContent = "正在從 Google 試算表載入… / Loading…";
+    try {
+      await loadFromGoogleSheet();
+      refreshPlanDropdowns();
+      updateLastCheckedDisplay();
+      updateDataSourceLabel();
+      toast("已從 Google 試算表載入保費表。");
+    } catch (e) {
+      const msg = (e && e.message) ? e.message : String(e);
+      sheetLoadError = msg;
+      updateDataSourceLabel();
+      toast("未能載入 Google 試算表，已保留現有資料。", true);
+    }
+  }
+
   async function loadData() {
+    try {
+      await loadFromGoogleSheet();
+      return;
+    } catch (e) {
+      sheetLoadError = (e && e.message) ? e.message : String(e);
+    }
     try {
       const res = await fetchJson("/api/data", { cache: "no-store" }, 1200);
       if (res.ok) {
@@ -2336,6 +2717,13 @@ window.DEFAULT_DATA = {"version":"3.0-web","sourceNote":"Extracted from the user
     bindNav("btn-admin", openAdmin);
     bindNav("btn-back", goHome);
     bindNav("btn-back-admin", goHome);
+    const reloadBtn = $("btn-reload-sheet");
+    if (reloadBtn) {
+      reloadBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        reloadFromGoogleSheet();
+      });
+    }
 
     $("btn-print").addEventListener("click", function () { window.print(); });
 

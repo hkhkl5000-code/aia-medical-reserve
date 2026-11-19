@@ -1,0 +1,2410 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AIA 醫療儲備計劃">
+  <title>AIA 醫療儲備計劃</title>
+  <style>
+/* AIA 醫療儲備計劃 — local website, styled after the Excel START sheet */
+
+:root {
+  --cream: #fff2cc;
+  --pink: #ead1dc;
+  --pink-deep: #d5a6bd;
+  --welcome-ink: #cc4125;
+  --yellow: #ffff00;
+  --gold: #f1c232;
+  --hint: #fce5cd;
+  --reminder: #f9cb9c;
+  --reminder-ink: #980000;
+  --green: #b6d7a8;
+  --green-soft: #d9ead3;
+  --blue: #4a86e8;
+  --navy: #1c4587;
+  --gray: #d9d9d9;
+  --gray-soft: #efefef;
+  --input-blue: #deebf7;
+  --cyan: #82dae3;
+  --total-gold: #ffd966;
+  --title-red: #ff0000;
+  --orange: #ff9900;
+  --purple: #9900ff;
+  --ink: #222;
+  --muted: #555;
+  --sheet: #fff;
+  --page: #f3eee4;
+  --line: #c8c2b6;
+  --shadow: 0 8px 28px rgba(80, 60, 30, 0.12);
+  --font: "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "PingFang TC",
+    "Noto Sans TC", "Calibri", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.4;
+  min-height: 100%;
+}
+
+body {
+  padding: 24px 16px 48px;
+}
+
+.sheet {
+  max-width: 1120px;
+  margin: 0 auto;
+  background: var(--sheet);
+  box-shadow: var(--shadow);
+  border: 1px solid #e4ddd0;
+}
+
+/* ---------- Header / welcome / steps (START) ---------- */
+
+.title-bar {
+  background: var(--cream);
+  color: var(--title-red);
+  font-size: 36px;
+  text-align: center;
+  padding: 10px 16px 8px;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.welcome {
+  background: var(--pink);
+  color: var(--welcome-ink);
+  padding: 10px 20px 12px;
+}
+.welcome .zh { font-size: 18px; }
+.welcome .en { font-size: 12px; margin-top: 2px; }
+
+.step {
+  padding: 0 16px 16px;
+}
+
+.step-head {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 8px 0 0;
+}
+
+.step-label {
+  background: var(--cream);
+  font-weight: 700;
+  text-align: center;
+  padding: 4px 10px;
+  min-width: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #f0e4b0;
+}
+.step-label .zh { font-size: 14px; }
+.step-label .en { font-size: 10px; }
+
+.step-num {
+  background: var(--yellow);
+  color: var(--title-red);
+  font-size: 24px;
+  font-weight: 700;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e6d000;
+}
+
+.step-head-fill {
+  flex: 1;
+  background: var(--cream);
+  border: 1px solid #f0e4b0;
+  border-left: none;
+}
+
+.step-body { margin-top: 0; }
+
+.instruct {
+  background: var(--gray-soft);
+  padding: 8px 14px;
+  font-size: 14px;
+  border-top: 1px solid #e5e5e5;
+}
+.instruct .en { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.update-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0;
+  margin-top: 8px;
+}
+.update-label {
+  background: var(--yellow);
+  color: var(--title-red);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 8px 14px;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.update-label .en { font-size: 11px; font-weight: 600; }
+.update-values {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  font-size: 16px;
+}
+.update-values .date { font-weight: 700; letter-spacing: 0.02em; }
+.update-values .status { color: var(--title-red); font-weight: 700; }
+
+.note {
+  padding: 8px 14px 0;
+  font-size: 13px;
+  color: #333;
+}
+.note .en { font-size: 12px; color: var(--muted); }
+
+.btn {
+  appearance: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 2px;
+  background: var(--navy);
+  color: #fff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  line-height: 1.3;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn:focus-visible { outline: 3px solid #f1c232; outline-offset: 2px; }
+.btn-update {
+  background: var(--navy);
+  margin: 12px 14px 0;
+}
+.btn-secondary {
+  background: #fff;
+  color: var(--navy);
+  border-color: #9db4d4;
+}
+.btn-danger { background: #a61b1b; }
+.btn-gold {
+  background: var(--gold);
+  color: #222;
+  font-weight: 700;
+  border-color: #d4a017;
+}
+.btn-green {
+  background: #38761d;
+  color: #fff;
+}
+
+/* ---------- Step 2 form + reminders ---------- */
+
+.step2-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+  gap: 16px;
+  padding: 12px 8px 0 0;
+  align-items: start;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: minmax(170px, 220px) minmax(140px, 1fr) minmax(0, 1.1fr);
+  gap: 0 8px;
+  align-items: stretch;
+  margin-bottom: 2px;
+  min-height: 48px;
+}
+
+.field-label {
+  padding: 4px 8px 4px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.field-label .zh { font-size: 14px; }
+.field-label .en { font-size: 11px; color: var(--muted); }
+
+.field-input {
+  display: flex;
+  align-items: center;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #333;
+  background: var(--input-blue);
+  color: var(--ink);
+  border-radius: 0;
+  min-height: 36px;
+}
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--blue);
+  outline-offset: 0;
+}
+input:disabled, select:disabled {
+  background: var(--gray);
+  color: var(--purple);
+  font-weight: 700;
+  cursor: not-allowed;
+  border-color: #bbb;
+}
+
+select#inp-plan {
+  background: var(--gold);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.hint {
+  background: var(--hint);
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 13px;
+  color: #333;
+}
+.hint .en { font-size: 11px; color: var(--muted); }
+.hint.arrow { color: #333; }
+.hint.arrow .zh::before { content: none; }
+
+.form-errors {
+  margin: 12px 14px 0;
+  padding: 10px 14px;
+  background: #fce8e6;
+  border: 1px solid #e06666;
+  color: #990000;
+  display: none;
+}
+.form-errors.visible { display: block; }
+.form-errors h3 { margin: 0 0 6px; font-size: 14px; }
+.form-errors ul { margin: 0; padding-left: 20px; }
+
+/* Reminder panel */
+.reminders {
+  border: 1px solid #e0c8a0;
+  background: #fff;
+}
+.reminders-head {
+  background: var(--reminder);
+  color: var(--reminder-ink);
+  text-align: center;
+  padding: 6px 8px;
+  font-weight: 700;
+}
+.reminders-head .zh { font-size: 14px; }
+.reminders-head .en { font-size: 12px; }
+.reminder-group { }
+.reminder-group .group-title {
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  white-space: pre-wrap;
+}
+.reminder-group .group-item {
+  padding: 4px 12px;
+  font-size: 12px;
+}
+.reminder-group.sgh2 .group-title,
+.reminder-group.sgh2 .group-item { background: var(--gold); }
+.reminder-group.ceo5 .group-title { background: var(--green); }
+.reminder-group.ceo5 .group-item { background: var(--green-soft); }
+.reminder-group.essence .group-title { background: var(--pink-deep); }
+.reminder-group.essence .group-item { background: var(--pink); }
+
+/* ---------- Step 3 cash values ---------- */
+
+.cash-grid {
+  display: grid;
+  grid-template-columns: 80px 80px minmax(140px, 220px);
+  gap: 8px 10px;
+  align-items: center;
+  padding: 12px 14px 0;
+  max-width: 520px;
+}
+.cash-age-label { font-weight: 700; padding-left: 14px; }
+.cash-age {
+  background: #d9d9d9;
+  color: #7030a0;
+  font-weight: 700;
+  text-align: center;
+  padding: 6px 8px;
+  border: 1px solid #bfbfbf;
+}
+
+/* ---------- Step 4 currency ---------- */
+
+.fx-block { padding: 12px 14px 0; }
+.fx-caption {
+  text-align: right;
+  font-weight: 700;
+  margin-bottom: 8px;
+  padding-right: 8px;
+}
+.fx-caption .en { font-size: 12px; font-weight: 600; color: var(--muted); }
+
+.fx-row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 120px 110px;
+  gap: 0;
+  margin-bottom: 10px;
+  align-items: stretch;
+  max-width: 920px;
+}
+
+.fx-badge {
+  background: var(--pink);
+  color: var(--navy);
+  font-size: 36px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+.fx-badge { min-height: 48px; -webkit-tap-highlight-color: rgba(28,69,135,0.2); }
+.fx-badge:hover { filter: brightness(0.97); }
+.fx-badge:focus-visible { outline: 3px solid var(--navy); outline-offset: -3px; }
+
+.fx-action {
+  background: var(--green-soft);
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 14px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
+}
+.fx-action { min-height: 48px; -webkit-tap-highlight-color: rgba(28,69,135,0.2); }
+.fx-action:hover { filter: brightness(0.97); }
+.fx-action .en { font-size: 12px; font-weight: 600; }
+
+.fx-pair {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 8px;
+  font-weight: 700;
+  color: #333;
+}
+.fx-pair .en { font-size: 11px; font-weight: 600; color: var(--muted); }
+
+#inp-fx-usd, #inp-fx-hkd {
+  background: #fff;
+  color: var(--orange);
+  font-size: 18px;
+  font-weight: 700;
+  border-color: #888;
+}
+
+.rule {
+  margin: 24px 16px 8px;
+  border: none;
+  border-top: 3px solid #999;
+}
+
+.footer {
+  background: var(--gray);
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 11px;
+  color: #333;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+}
+
+/* ---------- Views ---------- */
+
+.view { display: none; }
+.view.active { display: block; }
+
+.view-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #faf7f0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---------- Comparison ---------- */
+
+.compare-title {
+  background: var(--cream);
+  font-size: 24px;
+  padding: 10px 16px 6px;
+  font-weight: 500;
+}
+.compare-title .en { font-size: 14px; color: var(--muted); font-weight: 400; }
+
+.compare-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  padding: 8px 16px 12px;
+  font-size: 15px;
+}
+.compare-meta strong { font-weight: 700; }
+
+.schedules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 8px 16px 16px;
+}
+
+.sched-head {
+  padding: 8px 12px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+}
+.sched-head.sa { background: var(--green); color: #111; }
+.sched-head.res { background: var(--blue); color: #fff; }
+.sched-sub { font-size: 12px; font-weight: 600; margin-top: 2px; opacity: 0.9; }
+
+.premium-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.premium-table th,
+.premium-table td {
+  border: 1px solid #ddd;
+  padding: 3px 8px;
+  text-align: right;
+}
+.premium-table th {
+  background: var(--cream);
+  text-align: center;
+  font-size: 11px;
+}
+.premium-table th.col-prem { background: var(--yellow); }
+.premium-table td.age { text-align: center; font-weight: 600; background: #fffdf5; }
+.premium-table tr:nth-child(even) td { background: #fbfaf6; }
+.premium-table tr:nth-child(even) td.age { background: #f7f3e6; }
+.premium-table td.blank { color: #aaa; text-align: center; }
+
+.totals-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: var(--total-gold);
+  font-size: 18px;
+}
+.totals-row .amount {
+  background: var(--yellow);
+  font-weight: 700;
+  padding: 4px 10px;
+  min-width: 140px;
+  text-align: right;
+}
+.savings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: var(--total-gold);
+  color: var(--title-red);
+  font-size: 18px;
+  font-weight: 700;
+}
+.savings-row .amount { background: var(--yellow); padding: 4px 10px; min-width: 140px; text-align: right; }
+
+.pay-years-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.return-wrap { padding: 8px 16px 24px; }
+.return-banner {
+  background: var(--cyan);
+  text-align: center;
+  padding: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+.return-grid {
+  display: grid;
+  grid-template-columns: 70px 1fr 1fr;
+  border: 1px solid #ccc;
+}
+.return-grid .h-sa { background: var(--green); font-weight: 700; text-align: center; padding: 8px; }
+.return-grid .h-res { background: var(--blue); color: #fff; font-weight: 700; text-align: center; padding: 8px; }
+.return-grid .h-age { background: var(--cyan); }
+.return-sub {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.return-sub > div {
+  background: var(--pink);
+  padding: 6px 8px;
+  font-size: 12px;
+  text-align: center;
+  border-top: 1px solid #e6c9d4;
+  border-left: 1px solid #e6c9d4;
+}
+.return-body { display: contents; }
+.return-row {
+  display: contents;
+}
+.return-row > div {
+  padding: 8px;
+  border-top: 1px solid #ddd;
+  text-align: right;
+}
+.return-row .age-cell {
+  text-align: center;
+  font-weight: 700;
+  background: #f7f3e6;
+}
+
+/* ---------- Admin ---------- */
+
+.admin-title {
+  background: var(--cream);
+  color: var(--navy);
+  padding: 10px 16px;
+  font-size: 22px;
+}
+.admin-title .en { font-size: 13px; color: var(--muted); font-weight: 400; }
+
+.admin-body { padding: 16px; }
+
+.admin-card {
+  border: 1px solid var(--line);
+  margin-bottom: 16px;
+  background: #fff;
+}
+.admin-card h2 {
+  margin: 0;
+  padding: 8px 12px;
+  background: #f6f1e6;
+  font-size: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.admin-card .card-body { padding: 12px; }
+.admin-card p { margin: 0 0 10px; font-size: 13px; color: #333; }
+
+.admin-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.admin-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.admin-inline label { font-size: 13px; font-weight: 700; }
+.admin-inline input[type="date"],
+.admin-inline input[type="text"],
+.admin-inline select {
+  width: auto;
+  min-width: 180px;
+  font-weight: 600;
+}
+
+.rate-editor-wrap {
+  overflow: auto;
+  max-height: 520px;
+  border: 1px solid #ddd;
+}
+.rate-editor {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.rate-editor th {
+  position: sticky;
+  top: 0;
+  background: var(--cream);
+  border: 1px solid #ddd;
+  padding: 6px;
+  z-index: 1;
+}
+.rate-editor td {
+  border: 1px solid #eee;
+  padding: 0;
+}
+.rate-editor td.age {
+  text-align: center;
+  font-weight: 700;
+  width: 60px;
+  background: #faf7f0;
+}
+.rate-editor input {
+  border: none;
+  background: transparent;
+  min-height: 28px;
+  font-size: 12px;
+  font-weight: 600;
+  width: 100%;
+}
+.rate-editor input:focus { background: #fff8d6; outline: none; }
+.rate-editor input.missing { background: #fdecea; }
+.rate-editor .na { text-align: center; color: #999; padding: 4px; background: #f4f4f4; }
+
+.plan-list { width: 100%; border-collapse: collapse; font-size: 13px; }
+.plan-list th, .plan-list td {
+  border: 1px solid #e5e0d6;
+  padding: 6px 8px;
+  text-align: left;
+}
+.plan-list th { background: #f6f1e6; }
+.plan-list td.counts { font-variant-numeric: tabular-nums; text-align: center; }
+.plan-list .gap { color: #a61b1b; font-size: 12px; }
+
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #0b3d2e;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  display: none;
+  z-index: 20;
+  max-width: 360px;
+}
+.toast.visible { display: block; }
+.toast.error { background: #7b1a1a; }
+
+.help-muted { font-size: 12px; color: var(--muted); }
+
+.file-name { font-size: 12px; color: var(--muted); }
+
+/* ---------- Print ---------- */
+
+@media print {
+  body { background: #fff; padding: 0; }
+  .sheet { box-shadow: none; border: none; max-width: none; }
+  .view-toolbar, .btn, .footer, #view-start, #view-admin, .toast { display: none !important; }
+  #view-compare.active { display: block !important; }
+  .schedules { display: grid; }
+  a { text-decoration: none; color: inherit; }
+  .title-bar, .compare-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sched-head, .premium-table th, .totals-row, .savings-row, .return-banner,
+  .return-grid .h-sa, .return-grid .h-res, .return-sub > div {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+@media (max-width: 860px) {
+  body { padding: 8px; }
+  .title-bar { font-size: 26px; }
+  .step2-grid, .schedules, .fx-row, .field-row, .return-grid, .cash-grid {
+    grid-template-columns: 1fr;
+  }
+  .fx-row { grid-template-columns: 64px 1fr; }
+  .field-row { grid-template-columns: 1fr; min-height: 0; }
+  .cash-grid { grid-template-columns: 70px 70px 1fr; }
+}
+
+
+/* Standalone / iPad */
+html { -webkit-text-size-adjust: 100%; }
+input, select, button { font-size: 16px; } /* avoid iOS zoom on focus */
+
+  </style>
+</head>
+<body>
+  <div class="sheet">
+
+    <!-- ========== START homepage ========== -->
+    <section id="view-start" class="view active" aria-label="主頁">
+      <header class="title-bar">AIA 醫療儲備計劃</header>
+      <div class="welcome">
+        <div class="zh">歡迎使用本系統，請跟隨以下步驟:</div>
+        <div class="en">Welcome to use this system, please follow the procedures below:</div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="step" id="step-1">
+        <div class="step-head">
+          <div class="step-label">
+            <span class="zh">步驟</span>
+            <span class="en">Step</span>
+          </div>
+          <div class="step-num" aria-hidden="true">1</div>
+          <div class="step-head-fill"></div>
+        </div>
+        <div class="instruct">
+          <div class="zh">第一步請先檢查保費表是否已經更新（Male、Male_Rider、Female、Female_Rider）。</div>
+          <div class="en">Please make sure you have the most up-to-date premium tables (Male, Male_Rider, Female and Female_Rider).</div>
+        </div>
+        <div class="update-row">
+          <div class="update-label">
+            <span>上一次保費表更新為：</span>
+            <span class="en">Previous Update on Premium Table:</span>
+          </div>
+          <div class="update-values">
+            <span class="date" id="last-checked-date">—</span>
+            <span class="status" id="last-checked-status"></span>
+          </div>
+        </div>
+        <div class="note">
+          <div>如需檢查或更新保費表及計劃名單，請前往「更新保費表 / 計劃」頁面，並在完成後寫上今天日期。</div>
+          <div class="en">To review or update premium tables and plans, open the update page, then record today’s date when you are done.</div>
+        </div>
+        <a class="btn btn-update" href="#/admin" id="btn-admin">更新保費表 / 計劃</a>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step" id="step-2">
+        <div class="step-head">
+          <div class="step-label">
+            <span class="zh">步驟</span>
+            <span class="en">Step</span>
+          </div>
+          <div class="step-num" aria-hidden="true">2</div>
+          <div class="step-head-fill"></div>
+        </div>
+        <div class="instruct">
+          <div class="zh">請輸入準客戶的資料</div>
+          <div class="en">Please input the following information of your prospect</div>
+        </div>
+
+        <div class="step2-grid">
+          <form id="prospect-form" autocomplete="off" novalidate>
+            <div class="field-row">
+              <label class="field-label" for="inp-name">
+                <span class="zh">準客戶姓名</span>
+                <span class="en">Name of prospect</span>
+              </label>
+              <div class="field-input">
+                <input id="inp-name" name="name" type="text" maxlength="80">
+              </div>
+              <div></div>
+            </div>
+
+            <div class="field-row">
+              <label class="field-label" for="inp-gender">
+                <span class="zh">準客戶性別</span>
+                <span class="en">Gender of prospect</span>
+              </label>
+              <div class="field-input">
+                <select id="inp-gender" name="gender">
+                  <option value="M">M</option>
+                  <option value="F">F</option>
+                </select>
+              </div>
+              <div class="hint">
+                <span>Male (M); Female (F)</span>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <label class="field-label" for="inp-age">
+                <span class="zh">準客戶年齡</span>
+                <span class="en">Age of prospect</span>
+              </label>
+              <div class="field-input">
+                <input id="inp-age" name="age" type="number" min="0" max="99" step="1">
+              </div>
+              <div></div>
+            </div>
+
+            <div class="field-row">
+              <label class="field-label" for="inp-plan">
+                <span class="zh">所選醫療計畫</span>
+                <span class="en">Selected Medical Plan</span>
+              </label>
+              <div class="field-input">
+                <select id="inp-plan" name="plan">
+              <option value="AVSW">AVSW</option>
+              <option value="AVSW ($1100)">AVSW ($1100)</option>
+              <option value="AVSW ($2250)">AVSW ($2250)</option>
+              <option value="AVSW ($3750)">AVSW ($3750)</option>
+              <option value="AVSW ($6875)">AVSW ($6875)</option>
+              <option value="CEO 5 ($3125)">CEO 5 ($3125)</option>
+              <option value="CEO 5 non-US">CEO 5 non-US</option>
+              <option value="CEO 5 non-US ($2000)">CEO 5 non-US ($2000)</option>
+              <option value="CEO 5 non-US ($3125)">CEO 5 non-US ($3125)</option>
+              <option value="CEO Essence 2">CEO Essence 2</option>
+              <option value="CEO Essence 2 ($2,000)">CEO Essence 2 ($2,000)</option>
+              <option value="CEO Essence 2 ($3,125)">CEO Essence 2 ($3,125)</option>
+              <option value="CEO Essence 2 Peral">CEO Essence 2 Peral</option>
+              <option value="Cancer Guardian">Cancer Guardian</option>
+              <option value="Cancer Guardian Plus">Cancer Guardian Plus</option>
+              <option value="Cancer Guardian Mega">Cancer Guardian Mega</option>
+                </select>
+              </div>
+              <div class="hint arrow">
+                <span class="zh">請按箭咀拉出選項</span>
+                <span class="en">Please press the arrow to release pull-down menu</span>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <label class="field-label" for="inp-basic">
+                <span class="zh">基本計劃年繳保費</span>
+                <span class="en">Annual Premium of the Basic plan</span>
+              </label>
+              <div class="field-input">
+                <input id="inp-basic" name="basicPremiumUSD" type="number" min="0" step="any">
+              </div>
+              <div class="hint">
+                <span class="zh">「Forever Love」年繳保費（美金）</span>
+                <span class="en">Annual premium of “Forever Love” in US Dollar</span>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <label class="field-label" for="inp-years">
+                <span class="zh">供款年期</span>
+                <span class="en">Number of year of payment</span>
+              </label>
+              <div class="field-input">
+                <input id="inp-years" name="paymentYears" type="number" min="1" max="100" step="1">
+              </div>
+              <div></div>
+            </div>
+          </form>
+
+          <aside class="reminders" aria-label="溫馨提示">
+            <div class="reminders-head">
+              <div class="zh">溫馨提示</div>
+              <div class="en">Reminders</div>
+            </div>
+            <div id="reminder-body"></div>
+          </aside>
+        </div>
+
+        <div id="form-errors" class="form-errors" role="alert"></div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step" id="step-3">
+        <div class="step-head">
+          <div class="step-label">
+            <span class="zh">步驟</span>
+            <span class="en">Step</span>
+          </div>
+          <div class="step-num" aria-hidden="true">3</div>
+          <div class="step-head-fill"></div>
+        </div>
+        <div class="instruct">
+          <div class="zh">請輸入基本計劃（「Forever Love」）在以下年期的總現金價值（美金）</div>
+          <div class="en">Please input the total account value (in US Dollar) of the basic plan (“Forever Love”) at different age stated below</div>
+        </div>
+        <div class="cash-grid">
+          <div class="cash-age-label">Age</div>
+          <div class="cash-age">70</div>
+          <input id="cv-70" type="number" step="any" min="0" aria-label="70 歲現金價值（美金）">
+
+          <div class="cash-age-label">Age</div>
+          <div class="cash-age">80</div>
+          <input id="cv-80" type="number" step="any" min="0" aria-label="80 歲現金價值（美金）">
+
+          <div class="cash-age-label">Age</div>
+          <div class="cash-age">90</div>
+          <input id="cv-90" type="number" step="any" min="0" aria-label="90 歲現金價值（美金）">
+
+          <div class="cash-age-label">Age</div>
+          <div class="cash-age">100</div>
+          <input id="cv-100" type="number" step="any" min="0" aria-label="100 歲現金價值（美金）">
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step" id="step-4">
+        <div class="step-head">
+          <div class="step-label">
+            <span class="zh">步驟</span>
+            <span class="en">Step</span>
+          </div>
+          <div class="step-num" aria-hidden="true">4</div>
+          <div class="step-head-fill"></div>
+        </div>
+        <div class="instruct">
+          <div class="zh">請選以下版本展示給準客戶</div>
+          <div class="en">Please select the following version for your prospect</div>
+        </div>
+        <div class="fx-block">
+          <div class="fx-caption">
+            <div>今天匯率</div>
+            <div class="en">Exchange rate</div>
+          </div>
+
+          <div class="fx-row">
+            <button type="button" class="fx-badge" id="btn-usd" title="開啟美金比較">A</button>
+            <button type="button" class="fx-action" id="btn-usd-text">
+              <div>美金 / USD — 開啟美金比較頁</div>
+              <div class="en">For US Dollar version, open the USD comparison</div>
+            </button>
+            <div class="fx-pair">
+              <div>USD to USD</div>
+            </div>
+            <input id="inp-fx-usd" type="number" min="0" step="any" aria-label="USD to USD 匯率">
+          </div>
+
+          <div class="fx-row">
+            <button type="button" class="fx-badge" id="btn-hkd" title="開啟港元比較">B</button>
+            <button type="button" class="fx-action" id="btn-hkd-text">
+              <div>港元 / HKD — 開啟港元比較頁</div>
+              <div class="en">For HK Dollar version, open the HKD comparison</div>
+            </button>
+            <div class="fx-pair">
+              <div>USD to HKD</div>
+            </div>
+            <input id="inp-fx-hkd" type="number" min="0" step="any" aria-label="USD to HKD 匯率">
+          </div>
+        </div>
+      </div>
+
+      <hr class="rule">
+      <footer class="footer">
+        <span>Version 3.0 web</span>
+        <span>Original Excel by Chan Cheuk Lun Marco on December 2017</span>
+        <span id="data-source-label"></span>
+      </footer>
+    </section>
+
+    <!-- ========== Comparison ========== -->
+    <section id="view-compare" class="view" aria-label="計劃比較">
+      <div class="view-toolbar">
+        <a class="btn btn-secondary" href="#/" id="btn-back">← 返回主頁 / Back</a>
+        <button type="button" class="btn" id="btn-print">列印 / Print</button>
+        <span id="compare-currency-tag" class="help-muted"></span>
+      </div>
+      <header class="compare-title">
+        <div>AIA 醫療儲備計劃比較</div>
+        <div class="en">AIA Medical payments comparison</div>
+      </header>
+      <div class="compare-meta" id="compare-meta"></div>
+      <div id="compare-errors" class="form-errors" role="alert"></div>
+
+      <div class="schedules">
+        <div>
+          <div class="sched-head sa">
+            純醫療計劃（租樓式）
+            <div class="sched-sub">Medical plan</div>
+          </div>
+          <div id="table-standalone"></div>
+          <div class="totals-row">
+            <span>Total Paid　已付保費總和</span>
+            <span class="amount" id="total-sa">—</span>
+          </div>
+        </div>
+        <div>
+          <div class="sched-head res">
+            醫療儲備計劃（供樓式）
+            <div class="sched-sub">Medical plan with cash value</div>
+          </div>
+          <div id="table-reserve"></div>
+          <div class="totals-row">
+            <span>已付保費總和</span>
+            <span class="amount" id="total-res">—</span>
+          </div>
+          <div class="savings-row">
+            <span>節省</span>
+            <span class="amount" id="total-save">—</span>
+          </div>
+          <div class="pay-years-note" id="pay-years-note"></div>
+        </div>
+      </div>
+
+      <div class="return-wrap">
+        <div class="return-banner">回報表　Return illustration</div>
+        <div id="return-table"></div>
+      </div>
+    </section>
+
+    <!-- ========== Admin ========== -->
+    <section id="view-admin" class="view" aria-label="更新保費表">
+      <div class="view-toolbar">
+        <a class="btn btn-secondary" href="#/" id="btn-back-admin">← 返回主頁 / Back</a>
+        <button type="button" class="btn btn-green" id="btn-save-data">儲存保費表 / Save</button>
+        <button type="button" class="btn btn-secondary" id="btn-download-json">下載 JSON</button>
+        <button type="button" class="btn btn-secondary" id="btn-download-js">下載 data.js</button>
+      </div>
+      <header class="admin-title">
+        <div>更新保費表 / 計劃</div>
+        <div class="en">Reserved workspace to update premium tables and plans later</div>
+      </header>
+      <div class="admin-body">
+
+        <div class="admin-card">
+          <h2>上一次檢查日期 / Last checked date</h2>
+          <div class="card-body">
+            <div class="admin-inline">
+              <label for="inp-last-checked">Premium last checked</label>
+              <input id="inp-last-checked" type="date">
+              <span class="help-muted" id="admin-status-preview"></span>
+            </div>
+            <p>此日期會顯示在主頁步驟 1，並套用「30 日內 / 超過 90 日」的狀態規則。</p>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h2>匯入 Excel / Import workbook</h2>
+          <div class="card-body">
+            <p>上載與原本相同結構的 .xlsx（分頁名稱：Male、Male_Rider、Female、Female_Rider、Menu；第 3 列標題、第 4–103 列年齡 0–99、D107 為最後檢查日期）。匯入後可先預覽，再儲存。</p>
+            <div class="admin-actions">
+              <input id="inp-xlsx" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+              <button type="button" class="btn" id="btn-pick-xlsx">選擇 Excel 檔案</button>
+              <button type="button" class="btn btn-gold" id="btn-import-xlsx" disabled>匯入並預覽</button>
+              <button type="button" class="btn btn-green" id="btn-apply-import" disabled>套用匯入結果</button>
+              <span class="file-name" id="xlsx-name">尚未選擇檔案</span>
+            </div>
+            <div id="import-report" class="help-muted" style="margin-top:10px;"></div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h2>計劃名單 / Plans</h2>
+          <div class="card-body">
+            <div class="admin-inline">
+              <label for="inp-new-plan">新增計劃名稱</label>
+              <input id="inp-new-plan" type="text" placeholder="例如 CEO 5 ($4000)" maxlength="80">
+              <button type="button" class="btn" id="btn-add-plan">新增 / Add</button>
+            </div>
+            <div class="admin-inline">
+              <label for="inp-rename-from">重新命名</label>
+              <select id="inp-rename-from"></select>
+              <input id="inp-rename-to" type="text" placeholder="新名稱" maxlength="80">
+              <button type="button" class="btn" id="btn-rename-plan">重新命名 / Rename</button>
+              <button type="button" class="btn btn-danger" id="btn-remove-plan">刪除所選計劃 / Remove</button>
+            </div>
+            <div style="overflow:auto;">
+              <table class="plan-list" id="plan-list"></table>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h2>編輯費率 / Edit rates</h2>
+          <div class="card-body">
+            <p>選擇計劃後，可直接修改四張表在年齡 0–99 的保費。空白代表該年齡沒有費率。灰色欄表示該表沒有此計劃。</p>
+            <div class="admin-inline">
+              <label for="inp-edit-plan">計劃</label>
+              <select id="inp-edit-plan"></select>
+            </div>
+            <div class="rate-editor-wrap">
+              <table class="rate-editor" id="rate-editor"></table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  
+  
+  <script>
+/* Auto-generated from data/premiums.json. Regenerated when saving via server.py. */
+window.DEFAULT_DATA = {"version":"3.0-web","sourceNote":"Extracted from the user's AIA medical reserve Excel. Premium last checked 2025-08-08.","lastChecked":"2025-08-08","menu":["AVSW","AVSW ($1100)","AVSW ($2250)","AVSW ($3750)","AVSW ($6875)","CEO 5 ($3125)","CEO 5 non-US","CEO 5 non-US ($2000)","CEO 5 non-US ($3125)","CEO Essence 2","CEO Essence 2 ($2,000)","CEO Essence 2 ($3,125)","CEO Essence 2 Peral","Cancer Guardian","Cancer Guardian Plus","Cancer Guardian Mega"],"defaults":{"name":"Sandy","gender":"F","age":39,"plan":"AVSW ($2250)","basicPremiumUSD":5760.3,"paymentYears":20,"cashValuesUSD":{"70":13996,"80":155933,"90":141478,"100":115581},"fx":{"USD":1,"HKD":7.85}},"reminderPlans":[{"title":"特級健康之寶 2系列                         Super Good Health 2 Series","items":["SGH2 Ward +SMM","SGH2 Semi-Private +SMM","SGH2 Private +SMM"]},{"title":"至尊醫療 5 系列                               CEO 5 Series","items":["CEO 5","CEO 5 ($2000)","CEO 5 ($3125)","CEO 5 non-US","CEO 5 non-US ($2000)","CEO 5 non-US ($3125)"]},{"title":"亞洲至尊醫療 2 系列                        CEO Essence 2 Series","items":["CEO Essence 2","CEO Essence 2 ($2,000)","CEO Essence 2 ($3,125)"]}],"tables":{"Male":{"title":"Male (Plan)","lastChecked":"2025-08-08","plans":{"AVSW":{"rates":{"0":1169.0,"1":1169.0,"2":1169.0,"3":1169.0,"4":1169.0,"5":1127.0,"6":1085.0,"7":1043.0,"8":1001.0,"9":959.0,"10":917.0,"11":917.0,"12":917.0,"13":917.0,"14":917.0,"15":917.0,"16":917.0,"17":917.0,"18":917.0,"19":927.0,"20":947.0,"21":972.0,"22":1018.0,"23":1074.0,"24":1123.0,"25":1224.0,"26":1317.0,"27":1412.0,"28":1499.0,"29":1565.0,"30":1611.0,"31":1656.0,"32":1679.0,"33":1724.0,"34":1791.0,"35":1824.0,"36":1825.0,"37":1859.0,"38":1905.0,"39":1915.0,"40":1937.0,"41":1992.0,"42":2077.0,"43":2170.0,"44":2461.0,"45":2577.0,"46":2685.0,"47":2791.0,"48":2924.0,"49":3055.0,"50":3325.0,"51":3325.0,"52":3574.0,"53":3817.0,"54":4110.0,"55":4399.0,"56":4658.0,"57":4959.0,"58":5189.0,"59":5534.0,"60":5894.0,"61":6266.0,"62":6691.0,"63":7245.0,"64":7946.0,"65":8587.0,"66":9318.0,"67":9868.0,"68":10279.0,"69":10812.0,"70":11313.0,"71":12054.0,"72":12721.0,"73":13378.0,"74":14060.0,"75":14718.0,"76":15507.0,"77":16127.0,"78":16733.0,"79":16858.0,"80":17207.0,"81":18377.0,"82":18732.0,"83":19065.0,"84":19367.0,"85":20393.0,"86":20768.0,"87":21097.0,"88":21423.0,"89":21767.0,"90":22111.0,"91":22470.0,"92":22798.0,"93":23142.0,"94":23517.0,"95":23860.0,"96":24219.0,"97":24516.0,"98":24874.0,"99":25234.0},"effectiveDate":"2025-11-11","groupHeader":"AVPU"},"AVSW ($1100)":{"rates":{"0":566.0,"1":566.0,"2":566.0,"3":566.0,"4":566.0,"5":521.0,"6":506.0,"7":490.0,"8":475.0,"9":460.0,"10":445.0,"11":445.0,"12":445.0,"13":445.0,"14":445.0,"15":445.0,"16":445.0,"17":445.0,"18":445.0,"19":461.0,"20":461.0,"21":469.0,"22":510.0,"23":529.0,"24":590.0,"25":622.0,"26":651.0,"27":720.0,"28":752.0,"29":788.0,"30":814.0,"31":823.0,"32":834.0,"33":847.0,"34":871.0,"35":883.0,"36":927.0,"37":928.0,"38":953.0,"39":954.0,"40":966.0,"41":1032.0,"42":1078.0,"43":1127.0,"44":1177.0,"45":1248.0,"46":1300.0,"47":1387.0,"48":1448.0,"49":1516.0,"50":1592.0,"51":1726.0,"52":1819.0,"53":1970.0,"54":2113.0,"55":2246.0,"56":2396.0,"57":2548.0,"58":2697.0,"59":2891.0,"60":3057.0,"61":3240.0,"62":3470.0,"63":3773.0,"64":4121.0,"65":4438.0,"66":4835.0,"67":5113.0,"68":5342.0,"69":5619.0,"70":5904.0,"71":6291.0,"72":6656.0,"73":6954.0,"74":7371.0,"75":7756.0,"76":8092.0,"77":8403.0,"78":8659.0,"79":8940.0,"80":9086.0,"81":9496.0,"82":9711.0,"83":9871.0,"84":10075.0,"85":10540.0,"86":10720.0,"87":10883.0,"88":11063.0,"89":11242.0,"90":11421.0,"91":11633.0,"92":11812.0,"93":11961.0,"94":12172.0,"95":12274.0,"96":12517.0,"97":12664.0,"98":12859.0,"99":13024.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($2250)":{"rates":{"0":445.0,"1":445.0,"2":445.0,"3":445.0,"4":445.0,"5":408.0,"6":396.0,"7":383.0,"8":371.0,"9":359.0,"10":346.0,"11":346.0,"12":346.0,"13":346.0,"14":346.0,"15":346.0,"16":346.0,"17":346.0,"18":346.0,"19":360.0,"20":360.0,"21":366.0,"22":399.0,"23":414.0,"24":463.0,"25":487.0,"26":510.0,"27":565.0,"28":589.0,"29":618.0,"30":639.0,"31":645.0,"32":654.0,"33":664.0,"34":682.0,"35":691.0,"36":728.0,"37":728.0,"38":748.0,"39":748.0,"40":758.0,"41":812.0,"42":847.0,"43":886.0,"44":924.0,"45":980.0,"46":1020.0,"47":1090.0,"48":1138.0,"49":1192.0,"50":1252.0,"51":1357.0,"52":1430.0,"53":1552.0,"54":1665.0,"55":1771.0,"56":1889.0,"57":2009.0,"58":2127.0,"59":2281.0,"60":2411.0,"61":2555.0,"62":2737.0,"63":2977.0,"64":3251.0,"65":6500.0,"66":3814.0,"67":4033.0,"68":4214.0,"69":4433.0,"70":4658.0,"71":4964.0,"72":5252.0,"73":5486.0,"74":5817.0,"75":6122.0,"76":6385.0,"77":6629.0,"78":6830.0,"79":7059.0,"80":7253.0,"81":7489.0,"82":7660.0,"83":7785.0,"84":7948.0,"85":8318.0,"86":8460.0,"87":8588.0,"88":8731.0,"89":8872.0,"90":9014.0,"91":9181.0,"92":9323.0,"93":9440.0,"94":9607.0,"95":9685.0,"96":9879.0,"97":9995.0,"98":10149.0,"99":10278.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($3750)":{"rates":{"0":382.0,"1":382.0,"2":382.0,"3":382.0,"4":382.0,"5":351.0,"6":343.0,"7":334.0,"8":326.0,"9":318.0,"10":310.0,"11":310.0,"12":310.0,"13":310.0,"14":310.0,"15":310.0,"16":310.0,"17":310.0,"18":310.0,"19":317.0,"20":317.0,"21":323.0,"22":353.0,"23":368.0,"24":405.0,"25":419.0,"26":448.0,"27":493.0,"28":518.0,"29":544.0,"30":555.0,"31":560.0,"32":582.0,"33":601.0,"34":610.0,"35":628.0,"36":650.0,"37":650.0,"38":659.0,"39":659.0,"40":679.0,"41":714.0,"42":739.0,"43":778.0,"44":807.0,"45":875.0,"46":917.0,"47":978.0,"48":1007.0,"49":1052.0,"50":1098.0,"51":1199.0,"52":1269.0,"53":1397.0,"54":1498.0,"55":1576.0,"56":1663.0,"57":1773.0,"58":1897.0,"59":2019.0,"60":2143.0,"61":2273.0,"62":2433.0,"63":2655.0,"64":2900.0,"65":3090.0,"66":3381.0,"67":3575.0,"68":3738.0,"69":3942.0,"70":4138.0,"71":4406.0,"72":4654.0,"73":4893.0,"74":5162.0,"75":5439.0,"76":5667.0,"77":5896.0,"78":6068.0,"79":6267.0,"80":6437.0,"81":6662.0,"82":6802.0,"83":6906.0,"84":7048.0,"85":7377.0,"86":7499.0,"87":7619.0,"88":7753.0,"89":7899.0,"90":8006.0,"91":8154.0,"92":8260.0,"93":8394.0,"94":8540.0,"95":8621.0,"96":8781.0,"97":8875.0,"98":9022.0,"99":9129.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($6875)":{"rates":{"0":284.0,"1":284.0,"2":284.0,"3":284.0,"4":284.0,"5":257.0,"6":251.0,"7":246.0,"8":239.0,"9":233.0,"10":227.0,"11":227.0,"12":227.0,"13":227.0,"14":227.0,"15":227.0,"16":227.0,"17":227.0,"18":227.0,"19":233.0,"20":233.0,"21":237.0,"22":259.0,"23":270.0,"24":298.0,"25":307.0,"26":329.0,"27":361.0,"28":381.0,"29":400.0,"30":407.0,"31":410.0,"32":427.0,"33":440.0,"34":448.0,"35":461.0,"36":476.0,"37":476.0,"38":483.0,"39":483.0,"40":498.0,"41":524.0,"42":542.0,"43":570.0,"44":590.0,"45":641.0,"46":672.0,"47":716.0,"48":739.0,"49":772.0,"50":805.0,"51":878.0,"52":931.0,"53":1024.0,"54":1098.0,"55":1156.0,"56":1219.0,"57":1300.0,"58":1391.0,"59":1481.0,"60":1571.0,"61":1666.0,"62":1783.0,"63":1946.0,"64":2126.0,"65":2264.0,"66":2478.0,"67":2620.0,"68":2740.0,"69":2889.0,"70":3032.0,"71":3229.0,"72":3410.0,"73":3586.0,"74":3783.0,"75":3986.0,"76":4154.0,"77":4321.0,"78":4447.0,"79":4594.0,"80":4717.0,"81":4883.0,"82":4985.0,"83":5060.0,"84":5165.0,"85":5406.0,"86":5495.0,"87":5584.0,"88":5681.0,"89":5789.0,"90":5867.0,"91":5975.0,"92":6054.0,"93":6152.0,"94":6259.0,"95":6318.0,"96":6435.0,"97":6504.0,"98":6611.0,"99":6691.0},"effectiveDate":"2017-10-18","groupHeader":"Flexi CEO 5 non-US"},"CEO 5 ($3125)":{"rates":{"0":1380.0,"1":1380.0,"2":1380.0,"3":1380.0,"4":1380.0,"5":1240.0,"6":1240.0,"7":1240.0,"8":1240.0,"9":1240.0,"10":1240.0,"11":1240.0,"12":1240.0,"13":1240.0,"14":1240.0,"15":1240.0,"16":1240.0,"17":1240.0,"18":1240.0,"19":1360.0,"20":1380.0,"21":1440.0,"22":1540.0,"23":1620.0,"24":1720.0,"25":1800.0,"26":1960.0,"27":2020.0,"28":2100.0,"29":2120.0,"30":2140.0,"31":2180.0,"32":2240.0,"33":2260.0,"34":2320.0,"35":2360.0,"36":2400.0,"37":2420.0,"38":2480.0,"39":2540.0,"40":2580.0,"41":2620.0,"42":2740.0,"43":2800.0,"44":2940.0,"45":3020.0,"46":3100.0,"47":3200.0,"48":3340.0,"49":3420.0,"50":3560.0,"51":3740.0,"52":3920.0,"53":4100.0,"54":4260.0,"55":4460.0,"56":4620.0,"57":4880.0,"58":5080.0,"59":5300.0,"60":5500.0,"61":6040.0,"62":6700.0,"63":7660.0,"64":8020.0,"65":8380.0,"66":9220.0,"67":10060.0,"68":10700.0,"69":11000.0,"70":11180.0,"71":11540.0,"72":11960.0,"73":12300.0,"74":12780.0,"75":13340.0,"76":13780.0,"77":14400.0,"78":15580.0,"79":15800.0,"80":16560.0,"81":17120.0,"82":17320.0,"83":17600.0,"84":17780.0,"85":18060.0,"86":18200.0,"87":18360.0,"88":18520.0,"89":18660.0,"90":18820.0,"91":18960.0,"92":19160.0,"93":19280.0,"94":19440.0,"95":19600.0,"96":19740.0,"97":19920.0,"98":20040.0,"99":20200.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US":{"rates":{"0":1720.0,"1":1720.0,"2":1720.0,"3":1720.0,"4":1720.0,"5":1660.0,"6":1660.0,"7":1660.0,"8":1660.0,"9":1660.0,"10":1660.0,"11":1660.0,"12":1660.0,"13":1660.0,"14":1660.0,"15":1660.0,"16":1660.0,"17":1660.0,"18":1660.0,"19":1700.0,"20":1740.0,"21":1780.0,"22":1820.0,"23":1900.0,"24":1960.0,"25":2100.0,"26":2180.0,"27":2340.0,"28":2440.0,"29":2540.0,"30":2580.0,"31":2660.0,"32":2740.0,"33":2780.0,"34":2880.0,"35":2940.0,"36":2960.0,"37":3020.0,"38":3080.0,"39":3120.0,"40":3160.0,"41":3200.0,"42":3260.0,"43":3400.0,"44":3620.0,"45":3820.0,"46":4020.0,"47":4140.0,"48":4300.0,"49":4480.0,"50":4580.0,"51":4740.0,"52":4940.0,"53":5120.0,"54":5350.0,"55":5580.0,"56":5880.0,"57":6280.0,"58":6600.0,"59":7040.0,"60":7500.0,"61":8100.0,"62":8800.0,"63":9720.0,"64":10880.0,"65":12000.0,"66":13020.0,"67":13240.0,"68":13540.0,"69":13980.0,"70":14380.0,"71":15600.0,"72":16120.0,"73":16660.0,"74":16980.0,"75":17320.0,"76":18400.0,"77":19680.0,"78":20220.0,"79":20860.0,"80":21180.0,"81":22240.0,"82":22640.0,"83":23020.0,"84":23440.0,"85":23860.0,"86":24260.0,"87":24680.0,"88":25040.0,"89":25460.0,"90":25860.0,"91":26260.0,"92":26660.0,"93":27080.0,"94":27480.0,"95":27900.0,"96":28320.0,"97":28680.0,"98":29080.0,"99":29480.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US ($2000)":{"rates":{"0":800.0,"1":800.0,"2":800.0,"3":800.0,"4":800.0,"5":740.0,"6":740.0,"7":740.0,"8":740.0,"9":740.0,"10":740.0,"11":740.0,"12":740.0,"13":740.0,"14":740.0,"15":740.0,"16":740.0,"17":740.0,"18":740.0,"19":760.0,"20":760.0,"21":760.0,"22":820.0,"23":860.0,"24":920.0,"25":940.0,"26":980.0,"27":1060.0,"28":1100.0,"29":1160.0,"30":1180.0,"31":1200.0,"32":1220.0,"33":1240.0,"34":1260.0,"35":1280.0,"36":1360.0,"37":1360.0,"38":1380.0,"39":1380.0,"40":1400.0,"41":1480.0,"42":1520.0,"43":1580.0,"44":1640.0,"45":1720.0,"46":1820.0,"47":1940.0,"48":2000.0,"49":2080.0,"50":2120.0,"51":2200.0,"52":2260.0,"53":2400.0,"54":2500.0,"55":2580.0,"56":2720.0,"57":2920.0,"58":3080.0,"59":3320.0,"60":3500.0,"61":3780.0,"62":4140.0,"63":4580.0,"64":5080.0,"65":5560.0,"66":6080.0,"67":6160.0,"68":6340.0,"69":6540.0,"70":6760.0,"71":7320.0,"72":7600.0,"73":7800.0,"74":8020.0,"75":8220.0,"76":8640.0,"77":9240.0,"78":9440.0,"79":9960.0,"80":10180.0,"81":10360.0,"82":10580.0,"83":10740.0,"84":10980.0,"85":11100.0,"86":11280.0,"87":11480.0,"88":11660.0,"89":11860.0,"90":12060.0,"91":12260.0,"92":12440.0,"93":12620.0,"94":12840.0,"95":12940.0,"96":13200.0,"97":13340.0,"98":13580.0,"99":13740.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US ($3125)":{"rates":{"0":740.0,"1":740.0,"2":740.0,"3":740.0,"4":740.0,"5":660.0,"6":660.0,"7":660.0,"8":660.0,"9":660.0,"10":660.0,"11":660.0,"12":660.0,"13":660.0,"14":660.0,"15":660.0,"16":660.0,"17":660.0,"18":660.0,"19":700.0,"20":700.0,"21":700.0,"22":740.0,"23":760.0,"24":820.0,"25":860.0,"26":900.0,"27":940.0,"28":980.0,"29":1040.0,"30":1060.0,"31":1080.0,"32":1100.0,"33":1120.0,"34":1160.0,"35":1160.0,"36":1220.0,"37":1220.0,"38":1240.0,"39":1240.0,"40":1260.0,"41":1340.0,"42":1360.0,"43":1420.0,"44":1480.0,"45":1560.0,"46":1640.0,"47":1740.0,"48":1800.0,"49":1860.0,"50":1900.0,"51":1980.0,"52":2020.0,"53":2160.0,"54":2260.0,"55":2320.0,"56":2440.0,"57":2620.0,"58":2780.0,"59":3000.0,"60":3160.0,"61":3400.0,"62":3720.0,"63":4120.0,"64":4580.0,"65":5020.0,"66":5480.0,"67":5540.0,"68":5700.0,"69":5880.0,"70":6100.0,"71":6580.0,"72":6840.0,"73":7020.0,"74":7220.0,"75":7380.0,"76":7780.0,"77":8320.0,"78":8480.0,"79":8980.0,"80":9180.0,"81":9320.0,"82":9520.0,"83":9660.0,"84":9860.0,"85":10000.0,"86":10140.0,"87":10320.0,"88":10480.0,"89":10680.0,"90":10860.0,"91":11040.0,"92":11200.0,"93":11360.0,"94":11540.0,"95":11660.0,"96":11900.0,"97":12000.0,"98":12220.0,"99":12360.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO Essence 2":{"rates":{"0":1000.0,"1":1000.0,"2":1000.0,"3":1000.0,"4":1000.0,"5":1000.0,"6":1000.0,"7":1000.0,"8":1000.0,"9":1000.0,"10":1000.0,"11":1000.0,"12":1000.0,"13":1000.0,"14":1000.0,"15":1000.0,"16":1000.0,"17":1000.0,"18":1000.0,"19":1010.0,"20":1030.0,"21":1040.0,"22":1070.0,"23":1120.0,"24":1150.0,"25":1230.0,"26":1300.0,"27":1380.0,"28":1440.0,"29":1480.0,"30":1510.0,"31":1550.0,"32":1570.0,"33":1610.0,"34":1670.0,"35":1700.0,"36":1710.0,"37":1740.0,"38":1780.0,"39":1790.0,"40":1810.0,"41":1840.0,"42":1880.0,"43":1970.0,"44":2080.0,"45":2190.0,"46":2320.0,"47":2390.0,"48":2480.0,"49":2590.0,"50":2640.0,"51":2740.0,"52":2850.0,"53":2960.0,"54":3090.0,"55":3220.0,"56":3410.0,"57":3630.0,"58":3800.0,"59":4050.0,"60":4320.0,"61":4670.0,"62":5080.0,"63":5560.0,"64":6270.0,"65":6920.0,"66":7500.0,"67":7640.0,"68":7810.0,"69":8060.0,"70":8280.0,"71":8980.0,"72":9290.0,"73":9590.0,"74":9800.0,"75":9980.0,"76":10610.0,"77":11350.0,"78":11660.0,"79":12030.0,"80":12220.0,"81":12810.0,"82":13060.0,"83":13290.0,"84":13510.0,"85":13750.0,"86":14000.0,"87":14220.0,"88":14440.0,"89":14670.0,"90":14910.0,"91":15150.0,"92":15370.0,"93":15600.0,"94":15850.0,"95":16080.0,"96":16330.0,"97":16530.0,"98":16770.0,"99":17010.0},"effectiveDate":"2017-10-18","groupHeader":"CEO Essence 2"},"CEO Essence 2 ($2,000)":{"rates":{"0":480.0,"1":480.0,"2":480.0,"3":480.0,"4":480.0,"5":450.0,"6":450.0,"7":450.0,"8":450.0,"9":450.0,"10":450.0,"11":450.0,"12":450.0,"13":450.0,"14":450.0,"15":450.0,"16":450.0,"17":450.0,"18":450.0,"19":470.0,"20":470.0,"21":470.0,"22":500.0,"23":520.0,"24":570.0,"25":590.0,"26":610.0,"27":660.0,"28":680.0,"29":710.0,"30":730.0,"31":730.0,"32":740.0,"33":750.0,"34":770.0,"35":780.0,"36":820.0,"37":820.0,"38":840.0,"39":840.0,"40":850.0,"41":910.0,"42":930.0,"43":970.0,"44":1000.0,"45":1050.0,"46":1100.0,"47":1170.0,"48":1095.0,"49":1270.0,"50":1300.0,"51":1350.0,"52":1380.0,"53":1450.0,"54":1520.0,"55":1570.0,"56":1670.0,"57":1780.0,"58":1880.0,"59":2020.0,"60":2140.0,"61":2310.0,"62":2520.0,"63":2790.0,"64":3110.0,"65":3410.0,"66":3720.0,"67":3780.0,"68":3870.0,"69":4000.0,"70":4130.0,"71":4470.0,"72":4640.0,"73":4760.0,"74":4900.0,"75":5020.0,"76":5280.0,"77":5640.0,"78":5760.0,"79":6090.0,"80":6230.0,"81":6320.0,"82":6460.0,"83":6570.0,"84":6700.0,"85":6790.0,"86":6900.0,"87":7010.0,"88":7130.0,"89":7240.0,"90":7360.0,"91":7490.0,"92":7610.0,"93":7710.0,"94":7840.0,"95":7910.0,"96":8060.0,"97":8160.0,"98":8280.0,"99":8390.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO Essence 2 ($3,125)":{"rates":{"0":420.0,"1":420.0,"2":420.0,"3":420.0,"4":420.0,"5":390.0,"6":390.0,"7":390.0,"8":390.0,"9":390.0,"10":390.0,"11":390.0,"12":390.0,"13":390.0,"14":390.0,"15":390.0,"16":390.0,"17":390.0,"18":390.0,"19":400.0,"20":400.0,"21":400.0,"22":430.0,"23":440.0,"24":480.0,"25":490.0,"26":520.0,"27":560.0,"28":580.0,"29":600.0,"30":610.0,"31":610.0,"32":630.0,"33":650.0,"34":660.0,"35":680.0,"36":710.0,"37":710.0,"38":720.0,"39":720.0,"40":740.0,"41":770.0,"42":780.0,"43":820.0,"44":840.0,"45":910.0,"46":960.0,"47":1010.0,"48":1040.0,"49":1080.0,"50":1100.0,"51":1150.0,"52":1180.0,"53":1260.0,"54":1320.0,"55":1350.0,"56":1420.0,"57":1520.0,"58":1620.0,"59":1730.0,"60":1830.0,"61":1980.0,"62":2160.0,"63":2400.0,"64":2670.0,"65":2910.0,"66":3180.0,"67":3230.0,"68":3320.0,"69":3430.0,"70":3540.0,"71":3830.0,"72":3970.0,"73":4090.0,"74":4200.0,"75":4310.0,"76":4530.0,"77":4840.0,"78":4940.0,"79":5220.0,"80":5340.0,"81":5460.0,"82":5540.0,"83":5620.0,"84":5740.0,"85":5810.0,"86":5910.0,"87":6000.0,"88":6110.0,"89":6220.0,"90":6310.0,"91":6420.0,"92":6510.0,"93":6610.0,"94":6730.0,"95":6790.0,"96":6920.0,"97":6990.0,"98":7110.0,"99":7190.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO Essence 2 Peral":{"rates":{"0":1070.0,"1":1070.0,"2":1070.0,"3":1070.0,"4":1070.0,"5":1070.0,"6":1070.0,"7":1070.0,"8":1070.0,"9":1070.0,"10":1070.0,"11":1070.0,"12":1070.0,"13":1070.0,"14":1070.0,"15":1070.0,"16":1070.0,"17":1070.0,"18":1070.0,"19":1100.0,"20":1120.0,"21":1140.0,"22":1170.0,"23":1230.0,"24":1300.0,"25":1350.0,"26":1410.0,"27":1550.0,"28":1600.0,"29":1630.0,"30":1670.0,"31":1680.0,"32":1710.0,"33":1790.0,"34":1820.0,"35":1850.0,"36":1880.0,"37":1920.0,"38":1930.0,"39":1940.0,"40":2010.0,"41":2050.0,"42":2080.0,"43":2160.0,"44":2310.0,"45":2410.0,"46":2560.0,"47":2630.0,"48":2740.0,"49":2830.0,"50":2930.0,"51":3000.0,"52":3120.0,"53":3250.0,"54":3410.0,"55":3530.0,"56":3750.0,"57":3970.0,"58":4200.0,"59":4460.0,"60":4750.0,"61":5110.0,"62":5580.0,"63":6170.0,"64":6910.0,"65":7620.0,"66":8240.0,"67":8400.0,"68":8580.0,"69":8870.0,"70":9130.0,"71":9870.0,"72":10240.0,"73":10580.0,"74":10760.0,"75":10960.0,"76":11660.0,"77":12440.0,"78":12830.0,"79":13230.0,"80":13450.0,"81":14100.0,"82":14370.0,"83":14620.0,"84":14880.0,"85":15140.0,"86":15370.0,"87":15630.0,"88":15890.0,"89":16150.0,"90":16400.0,"91":16640.0,"92":16930.0,"93":17190.0,"94":17440.0,"95":17690.0,"96":17960.0,"97":18200.0,"98":18460.0,"99":18720.0},"effectiveDate":"2017-10-18","groupHeader":"CEO Essence 2 Peral"},"Cancer Guardian ":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":"Cancer Guardian "},"Cancer Guardian Plus":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":null},"Cancer Guardian Mega":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":null}},"planOrder":["AVSW","AVSW ($1100)","AVSW ($2250)","AVSW ($3750)","AVSW ($6875)","CEO 5 ($3125)","CEO 5 non-US","CEO 5 non-US ($2000)","CEO 5 non-US ($3125)","CEO Essence 2","CEO Essence 2 ($2,000)","CEO Essence 2 ($3,125)","CEO Essence 2 Peral","Cancer Guardian ","Cancer Guardian Plus","Cancer Guardian Mega"]},"Female":{"title":"Female (Plan)","lastChecked":"2025-08-08","plans":{"AVSW":{"rates":{"0":1169.0,"1":1169.0,"2":1169.0,"3":1169.0,"4":1169.0,"5":1127.0,"6":1085.0,"7":1043.0,"8":1001.0,"9":959.0,"10":917.0,"11":917.0,"12":917.0,"13":917.0,"14":917.0,"15":917.0,"16":917.0,"17":917.0,"18":917.0,"19":927.0,"20":947.0,"21":972.0,"22":1018.0,"23":1074.0,"24":1123.0,"25":1224.0,"26":1317.0,"27":1412.0,"28":1499.0,"29":1565.0,"30":1611.0,"31":1656.0,"32":1679.0,"33":1724.0,"34":1791.0,"35":1824.0,"36":1825.0,"37":1859.0,"38":1905.0,"39":1915.0,"40":1937.0,"41":1992.0,"42":2077.0,"43":2170.0,"44":2461.0,"45":2577.0,"46":2685.0,"47":2791.0,"48":2924.0,"49":3055.0,"50":3325.0,"51":3325.0,"52":3574.0,"53":3817.0,"54":4110.0,"55":4399.0,"56":4658.0,"57":4959.0,"58":5189.0,"59":5534.0,"60":5894.0,"61":6266.0,"62":6691.0,"63":7245.0,"64":7946.0,"65":8587.0,"66":9318.0,"67":9868.0,"68":10279.0,"69":10812.0,"70":11313.0,"71":12054.0,"72":12721.0,"73":13378.0,"74":14060.0,"75":14718.0,"76":15507.0,"77":16127.0,"78":16733.0,"79":16858.0,"80":17207.0,"81":18377.0,"82":18732.0,"83":19065.0,"84":19367.0,"85":20393.0,"86":20768.0,"87":21097.0,"88":21423.0,"89":21767.0,"90":22111.0,"91":22470.0,"92":22798.0,"93":23142.0,"94":23517.0,"95":23860.0,"96":24219.0,"97":24516.0,"98":24874.0,"99":25234.0},"effectiveDate":"2025-11-11","groupHeader":"AVPU"},"AVSW ($1100)":{"rates":{"0":566.0,"1":566.0,"2":566.0,"3":566.0,"4":566.0,"5":521.0,"6":506.0,"7":490.0,"8":475.0,"9":460.0,"10":445.0,"11":445.0,"12":445.0,"13":445.0,"14":445.0,"15":445.0,"16":445.0,"17":445.0,"18":445.0,"19":461.0,"20":461.0,"21":469.0,"22":510.0,"23":529.0,"24":590.0,"25":622.0,"26":651.0,"27":720.0,"28":752.0,"29":788.0,"30":814.0,"31":823.0,"32":834.0,"33":847.0,"34":871.0,"35":883.0,"36":927.0,"37":928.0,"38":953.0,"39":954.0,"40":966.0,"41":1032.0,"42":1078.0,"43":1127.0,"44":1177.0,"45":1248.0,"46":1300.0,"47":1387.0,"48":1448.0,"49":1516.0,"50":1592.0,"51":1726.0,"52":1819.0,"53":1970.0,"54":2113.0,"55":2246.0,"56":2396.0,"57":2548.0,"58":2697.0,"59":2891.0,"60":3057.0,"61":3240.0,"62":3470.0,"63":3773.0,"64":4121.0,"65":4438.0,"66":4835.0,"67":5113.0,"68":5342.0,"69":5619.0,"70":5904.0,"71":6291.0,"72":6656.0,"73":6954.0,"74":7371.0,"75":7756.0,"76":8092.0,"77":8403.0,"78":8659.0,"79":8940.0,"80":9086.0,"81":9496.0,"82":9711.0,"83":9871.0,"84":10075.0,"85":10540.0,"86":10720.0,"87":10883.0,"88":11063.0,"89":11242.0,"90":11421.0,"91":11633.0,"92":11812.0,"93":11961.0,"94":12172.0,"95":12274.0,"96":12517.0,"97":12664.0,"98":12859.0,"99":13024.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($2250)":{"rates":{"0":445.0,"1":445.0,"2":445.0,"3":445.0,"4":445.0,"5":408.0,"6":396.0,"7":383.0,"8":371.0,"9":359.0,"10":346.0,"11":346.0,"12":346.0,"13":346.0,"14":346.0,"15":346.0,"16":346.0,"17":346.0,"18":346.0,"19":360.0,"20":360.0,"21":366.0,"22":399.0,"23":414.0,"24":463.0,"25":487.0,"26":510.0,"27":565.0,"28":589.0,"29":618.0,"30":639.0,"31":645.0,"32":654.0,"33":664.0,"34":682.0,"35":691.0,"36":728.0,"37":728.0,"38":748.0,"39":748.0,"40":758.0,"41":812.0,"42":847.0,"43":886.0,"44":924.0,"45":980.0,"46":1020.0,"47":1090.0,"48":1138.0,"49":1192.0,"50":1252.0,"51":1357.0,"52":1430.0,"53":1552.0,"54":1665.0,"55":1771.0,"56":1889.0,"57":2009.0,"58":2127.0,"59":2281.0,"60":2411.0,"61":2555.0,"62":2737.0,"63":2977.0,"64":3251.0,"65":6500.0,"66":3814.0,"67":4033.0,"68":4214.0,"69":4433.0,"70":4658.0,"71":4964.0,"72":5252.0,"73":5486.0,"74":5817.0,"75":6122.0,"76":6385.0,"77":6629.0,"78":6830.0,"79":7059.0,"80":7253.0,"81":7489.0,"82":7660.0,"83":7785.0,"84":7948.0,"85":8318.0,"86":8460.0,"87":8588.0,"88":8731.0,"89":8872.0,"90":9014.0,"91":9181.0,"92":9323.0,"93":9440.0,"94":9607.0,"95":9685.0,"96":9879.0,"97":9995.0,"98":10149.0,"99":10278.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($3750)":{"rates":{"0":382.0,"1":382.0,"2":382.0,"3":382.0,"4":382.0,"5":351.0,"6":343.0,"7":334.0,"8":326.0,"9":318.0,"10":310.0,"11":310.0,"12":310.0,"13":310.0,"14":310.0,"15":310.0,"16":310.0,"17":310.0,"18":310.0,"19":317.0,"20":317.0,"21":323.0,"22":353.0,"23":368.0,"24":405.0,"25":419.0,"26":448.0,"27":493.0,"28":518.0,"29":544.0,"30":555.0,"31":560.0,"32":582.0,"33":601.0,"34":610.0,"35":628.0,"36":650.0,"37":650.0,"38":659.0,"39":659.0,"40":679.0,"41":714.0,"42":739.0,"43":778.0,"44":807.0,"45":875.0,"46":917.0,"47":978.0,"48":1007.0,"49":1052.0,"50":1098.0,"51":1199.0,"52":1269.0,"53":1397.0,"54":1498.0,"55":1576.0,"56":1663.0,"57":1773.0,"58":1897.0,"59":2019.0,"60":2143.0,"61":2273.0,"62":2433.0,"63":2655.0,"64":2900.0,"65":3090.0,"66":3381.0,"67":3575.0,"68":3738.0,"69":3942.0,"70":4138.0,"71":4406.0,"72":4654.0,"73":4893.0,"74":5162.0,"75":5439.0,"76":5667.0,"77":5896.0,"78":6068.0,"79":6267.0,"80":6437.0,"81":6662.0,"82":6802.0,"83":6906.0,"84":7048.0,"85":7377.0,"86":7499.0,"87":7619.0,"88":7753.0,"89":7899.0,"90":8006.0,"91":8154.0,"92":8260.0,"93":8394.0,"94":8540.0,"95":8621.0,"96":8781.0,"97":8875.0,"98":9022.0,"99":9129.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($6875)":{"rates":{"0":284.0,"1":284.0,"2":284.0,"3":284.0,"4":284.0,"5":257.0,"6":251.0,"7":246.0,"8":239.0,"9":233.0,"10":227.0,"11":227.0,"12":227.0,"13":227.0,"14":227.0,"15":227.0,"16":227.0,"17":227.0,"18":227.0,"19":233.0,"20":233.0,"21":237.0,"22":259.0,"23":270.0,"24":298.0,"25":307.0,"26":329.0,"27":361.0,"28":381.0,"29":400.0,"30":407.0,"31":410.0,"32":427.0,"33":440.0,"34":448.0,"35":461.0,"36":476.0,"37":476.0,"38":483.0,"39":483.0,"40":498.0,"41":524.0,"42":542.0,"43":570.0,"44":590.0,"45":641.0,"46":672.0,"47":716.0,"48":739.0,"49":772.0,"50":805.0,"51":878.0,"52":931.0,"53":1024.0,"54":1098.0,"55":1156.0,"56":1219.0,"57":1300.0,"58":1391.0,"59":1481.0,"60":1571.0,"61":1666.0,"62":1783.0,"63":1946.0,"64":2126.0,"65":2264.0,"66":2478.0,"67":2620.0,"68":2740.0,"69":2889.0,"70":3032.0,"71":3229.0,"72":3410.0,"73":3586.0,"74":3783.0,"75":3986.0,"76":4154.0,"77":4321.0,"78":4447.0,"79":4594.0,"80":4717.0,"81":4883.0,"82":4985.0,"83":5060.0,"84":5165.0,"85":5406.0,"86":5495.0,"87":5584.0,"88":5681.0,"89":5789.0,"90":5867.0,"91":5975.0,"92":6054.0,"93":6152.0,"94":6259.0,"95":6318.0,"96":6435.0,"97":6504.0,"98":6611.0,"99":6691.0},"effectiveDate":"2017-10-18","groupHeader":"Flexi CEO 5 non-US"},"CEO 5 ($3125)":{"rates":{"0":1380.0,"1":1380.0,"2":1380.0,"3":1380.0,"4":1380.0,"5":1240.0,"6":1240.0,"7":1240.0,"8":1240.0,"9":1240.0,"10":1240.0,"11":1240.0,"12":1240.0,"13":1240.0,"14":1240.0,"15":1240.0,"16":1240.0,"17":1240.0,"18":1240.0,"19":1360.0,"20":1380.0,"21":1440.0,"22":1540.0,"23":1620.0,"24":1720.0,"25":1800.0,"26":1960.0,"27":2020.0,"28":2100.0,"29":2120.0,"30":2140.0,"31":2180.0,"32":2240.0,"33":2260.0,"34":2320.0,"35":2360.0,"36":2400.0,"37":2420.0,"38":2480.0,"39":2540.0,"40":2580.0,"41":2620.0,"42":2740.0,"43":2800.0,"44":2940.0,"45":3020.0,"46":3100.0,"47":3200.0,"48":3340.0,"49":3420.0,"50":3560.0,"51":3740.0,"52":3920.0,"53":4100.0,"54":4260.0,"55":4460.0,"56":4620.0,"57":4880.0,"58":5080.0,"59":5300.0,"60":5500.0,"61":6040.0,"62":6700.0,"63":7660.0,"64":8020.0,"65":8380.0,"66":9220.0,"67":10060.0,"68":10700.0,"69":11000.0,"70":11180.0,"71":11540.0,"72":11960.0,"73":12300.0,"74":12780.0,"75":13340.0,"76":13780.0,"77":14400.0,"78":15580.0,"79":15800.0,"80":16560.0,"81":17120.0,"82":17320.0,"83":17600.0,"84":17780.0,"85":18060.0,"86":18200.0,"87":18360.0,"88":18520.0,"89":18660.0,"90":18820.0,"91":18960.0,"92":19160.0,"93":19280.0,"94":19440.0,"95":19600.0,"96":19740.0,"97":19920.0,"98":20040.0,"99":20200.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US":{"rates":{"0":1720.0,"1":1720.0,"2":1720.0,"3":1720.0,"4":1720.0,"5":1660.0,"6":1660.0,"7":1660.0,"8":1660.0,"9":1660.0,"10":1660.0,"11":1660.0,"12":1660.0,"13":1660.0,"14":1660.0,"15":1660.0,"16":1660.0,"17":1660.0,"18":1660.0,"19":1700.0,"20":1740.0,"21":1780.0,"22":1820.0,"23":1900.0,"24":1960.0,"25":2100.0,"26":2180.0,"27":2340.0,"28":2440.0,"29":2540.0,"30":2580.0,"31":2660.0,"32":2740.0,"33":2780.0,"34":2880.0,"35":2940.0,"36":2960.0,"37":3020.0,"38":3080.0,"39":3120.0,"40":3160.0,"41":3200.0,"42":3260.0,"43":3400.0,"44":3620.0,"45":3820.0,"46":4020.0,"47":4140.0,"48":4300.0,"49":4480.0,"50":4580.0,"51":4740.0,"52":4940.0,"53":5120.0,"54":5350.0,"55":5580.0,"56":5880.0,"57":6280.0,"58":6600.0,"59":7040.0,"60":7500.0,"61":8100.0,"62":8800.0,"63":9720.0,"64":10880.0,"65":12000.0,"66":13020.0,"67":13240.0,"68":13540.0,"69":13980.0,"70":14380.0,"71":15600.0,"72":16120.0,"73":16660.0,"74":16980.0,"75":17320.0,"76":18400.0,"77":19680.0,"78":20220.0,"79":20860.0,"80":21180.0,"81":22240.0,"82":22640.0,"83":23020.0,"84":23440.0,"85":23860.0,"86":24260.0,"87":24680.0,"88":25040.0,"89":25460.0,"90":25860.0,"91":26260.0,"92":26660.0,"93":27080.0,"94":27480.0,"95":27900.0,"96":28320.0,"97":28680.0,"98":29080.0,"99":29480.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US ($2000)":{"rates":{"0":800.0,"1":800.0,"2":800.0,"3":800.0,"4":800.0,"5":740.0,"6":740.0,"7":740.0,"8":740.0,"9":740.0,"10":740.0,"11":740.0,"12":740.0,"13":740.0,"14":740.0,"15":740.0,"16":740.0,"17":740.0,"18":740.0,"19":760.0,"20":760.0,"21":760.0,"22":820.0,"23":860.0,"24":920.0,"25":940.0,"26":980.0,"27":1060.0,"28":1100.0,"29":1160.0,"30":1180.0,"31":1200.0,"32":1220.0,"33":1240.0,"34":1260.0,"35":1280.0,"36":1360.0,"37":1360.0,"38":1380.0,"39":1380.0,"40":1400.0,"41":1480.0,"42":1520.0,"43":1580.0,"44":1640.0,"45":1720.0,"46":1820.0,"47":1940.0,"48":2000.0,"49":2080.0,"50":2120.0,"51":2200.0,"52":2260.0,"53":2400.0,"54":2500.0,"55":2580.0,"56":2720.0,"57":2920.0,"58":3080.0,"59":3320.0,"60":3500.0,"61":3780.0,"62":4140.0,"63":4580.0,"64":5080.0,"65":5560.0,"66":6080.0,"67":6160.0,"68":6340.0,"69":6540.0,"70":6760.0,"71":7320.0,"72":7600.0,"73":7800.0,"74":8020.0,"75":8220.0,"76":8640.0,"77":9240.0,"78":9440.0,"79":9960.0,"80":10180.0,"81":10360.0,"82":10580.0,"83":10740.0,"84":10980.0,"85":11100.0,"86":11280.0,"87":11480.0,"88":11660.0,"89":11860.0,"90":12060.0,"91":12260.0,"92":12440.0,"93":12620.0,"94":12840.0,"95":12940.0,"96":13200.0,"97":13340.0,"98":13580.0,"99":13740.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US ($3125)":{"rates":{"0":740.0,"1":740.0,"2":740.0,"3":740.0,"4":740.0,"5":660.0,"6":660.0,"7":660.0,"8":660.0,"9":660.0,"10":660.0,"11":660.0,"12":660.0,"13":660.0,"14":660.0,"15":660.0,"16":660.0,"17":660.0,"18":660.0,"19":700.0,"20":700.0,"21":700.0,"22":740.0,"23":760.0,"24":820.0,"25":860.0,"26":900.0,"27":940.0,"28":980.0,"29":1040.0,"30":1060.0,"31":1080.0,"32":1100.0,"33":1120.0,"34":1160.0,"35":1160.0,"36":1220.0,"37":1220.0,"38":1240.0,"39":1240.0,"40":1260.0,"41":1340.0,"42":1360.0,"43":1420.0,"44":1480.0,"45":1560.0,"46":1640.0,"47":1740.0,"48":1800.0,"49":1860.0,"50":1900.0,"51":1980.0,"52":2020.0,"53":2160.0,"54":2260.0,"55":2320.0,"56":2440.0,"57":2620.0,"58":2780.0,"59":3000.0,"60":3160.0,"61":3400.0,"62":3720.0,"63":4120.0,"64":4580.0,"65":5020.0,"66":5480.0,"67":5540.0,"68":5700.0,"69":5880.0,"70":6100.0,"71":6580.0,"72":6840.0,"73":7020.0,"74":7220.0,"75":7380.0,"76":7780.0,"77":8320.0,"78":8480.0,"79":8980.0,"80":9180.0,"81":9320.0,"82":9520.0,"83":9660.0,"84":9860.0,"85":10000.0,"86":10140.0,"87":10320.0,"88":10480.0,"89":10680.0,"90":10860.0,"91":11040.0,"92":11200.0,"93":11360.0,"94":11540.0,"95":11660.0,"96":11900.0,"97":12000.0,"98":12220.0,"99":12360.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO Essence 2":{"rates":{"0":1000.0,"1":1000.0,"2":1000.0,"3":1000.0,"4":1000.0,"5":1000.0,"6":1000.0,"7":1000.0,"8":1000.0,"9":1000.0,"10":1000.0,"11":1000.0,"12":1000.0,"13":1000.0,"14":1000.0,"15":1000.0,"16":1000.0,"17":1000.0,"18":1000.0,"19":1010.0,"20":1030.0,"21":1040.0,"22":1070.0,"23":1120.0,"24":1150.0,"25":1230.0,"26":1300.0,"27":1380.0,"28":1440.0,"29":1480.0,"30":1510.0,"31":1550.0,"32":1570.0,"33":1610.0,"34":1670.0,"35":1700.0,"36":1710.0,"37":1740.0,"38":1780.0,"39":1790.0,"40":1810.0,"41":1840.0,"42":1880.0,"43":1970.0,"44":2080.0,"45":2190.0,"46":2320.0,"47":2390.0,"48":2480.0,"49":2590.0,"50":2640.0,"51":2740.0,"52":2850.0,"53":2960.0,"54":3090.0,"55":3220.0,"56":3410.0,"57":3630.0,"58":3800.0,"59":4050.0,"60":4320.0,"61":4670.0,"62":5080.0,"63":5560.0,"64":6270.0,"65":6920.0,"66":7500.0,"67":7640.0,"68":7810.0,"69":8060.0,"70":8280.0,"71":8980.0,"72":9290.0,"73":9590.0,"74":9800.0,"75":9980.0,"76":10610.0,"77":11350.0,"78":11660.0,"79":12030.0,"80":12220.0,"81":12810.0,"82":13060.0,"83":13290.0,"84":13510.0,"85":13750.0,"86":14000.0,"87":14220.0,"88":14440.0,"89":14670.0,"90":14910.0,"91":15150.0,"92":15370.0,"93":15600.0,"94":15850.0,"95":16080.0,"96":16330.0,"97":16530.0,"98":16770.0,"99":17010.0},"effectiveDate":"2017-10-18","groupHeader":"CEO Essence 2"},"CEO Essence 2 ($2,000)":{"rates":{"0":480.0,"1":480.0,"2":480.0,"3":480.0,"4":480.0,"5":450.0,"6":450.0,"7":450.0,"8":450.0,"9":450.0,"10":450.0,"11":450.0,"12":450.0,"13":450.0,"14":450.0,"15":450.0,"16":450.0,"17":450.0,"18":450.0,"19":470.0,"20":470.0,"21":470.0,"22":500.0,"23":520.0,"24":570.0,"25":590.0,"26":610.0,"27":660.0,"28":680.0,"29":710.0,"30":730.0,"31":730.0,"32":740.0,"33":750.0,"34":770.0,"35":780.0,"36":820.0,"37":820.0,"38":840.0,"39":840.0,"40":850.0,"41":910.0,"42":930.0,"43":970.0,"44":1000.0,"45":1050.0,"46":1100.0,"47":1170.0,"48":1095.0,"49":1270.0,"50":1300.0,"51":1350.0,"52":1380.0,"53":1450.0,"54":1520.0,"55":1570.0,"56":1670.0,"57":1780.0,"58":1880.0,"59":2020.0,"60":2140.0,"61":2310.0,"62":2520.0,"63":2790.0,"64":3110.0,"65":3410.0,"66":3720.0,"67":3780.0,"68":3870.0,"69":4000.0,"70":4130.0,"71":4470.0,"72":4640.0,"73":4760.0,"74":4900.0,"75":5020.0,"76":5280.0,"77":5640.0,"78":5760.0,"79":6090.0,"80":6230.0,"81":6320.0,"82":6460.0,"83":6570.0,"84":6700.0,"85":6790.0,"86":6900.0,"87":7010.0,"88":7130.0,"89":7240.0,"90":7360.0,"91":7490.0,"92":7610.0,"93":7710.0,"94":7840.0,"95":7910.0,"96":8060.0,"97":8160.0,"98":8280.0,"99":8390.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO Essence 2 ($3,125)":{"rates":{"0":420.0,"1":420.0,"2":420.0,"3":420.0,"4":420.0,"5":390.0,"6":390.0,"7":390.0,"8":390.0,"9":390.0,"10":390.0,"11":390.0,"12":390.0,"13":390.0,"14":390.0,"15":390.0,"16":390.0,"17":390.0,"18":390.0,"19":400.0,"20":400.0,"21":400.0,"22":430.0,"23":440.0,"24":480.0,"25":490.0,"26":520.0,"27":560.0,"28":580.0,"29":600.0,"30":610.0,"31":610.0,"32":630.0,"33":650.0,"34":660.0,"35":680.0,"36":710.0,"37":710.0,"38":720.0,"39":720.0,"40":740.0,"41":770.0,"42":780.0,"43":820.0,"44":840.0,"45":910.0,"46":960.0,"47":1010.0,"48":1040.0,"49":1080.0,"50":1100.0,"51":1150.0,"52":1180.0,"53":1260.0,"54":1320.0,"55":1350.0,"56":1420.0,"57":1520.0,"58":1620.0,"59":1730.0,"60":1830.0,"61":1980.0,"62":2160.0,"63":2400.0,"64":2670.0,"65":2910.0,"66":3180.0,"67":3230.0,"68":3320.0,"69":3430.0,"70":3540.0,"71":3830.0,"72":3970.0,"73":4090.0,"74":4200.0,"75":4310.0,"76":4530.0,"77":4840.0,"78":4940.0,"79":5220.0,"80":5340.0,"81":5460.0,"82":5540.0,"83":5620.0,"84":5740.0,"85":5810.0,"86":5910.0,"87":6000.0,"88":6110.0,"89":6220.0,"90":6310.0,"91":6420.0,"92":6510.0,"93":6610.0,"94":6730.0,"95":6790.0,"96":6920.0,"97":6990.0,"98":7110.0,"99":7190.0},"effectiveDate":"2017-10-18","groupHeader":null},"Cancer Guardian ":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":"Cancer Guardian "},"Cancer Guardian Plus":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":null},"Cancer Guardian Mega":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":null}},"planOrder":["AVSW","AVSW ($1100)","AVSW ($2250)","AVSW ($3750)","AVSW ($6875)","CEO 5 ($3125)","CEO 5 non-US","CEO 5 non-US ($2000)","CEO 5 non-US ($3125)","CEO Essence 2","CEO Essence 2 ($2,000)","CEO Essence 2 ($3,125)","Cancer Guardian ","Cancer Guardian Plus","Cancer Guardian Mega"]},"Male_Rider":{"title":"Male (Rider)","lastChecked":"2025-08-08","plans":{"AVSW":{"rates":{"0":1027.0,"1":1027.0,"2":1027.0,"3":1027.0,"4":1027.0,"5":1001.0,"6":964.0,"7":927.0,"8":889.0,"9":852.0,"10":806.0,"11":815.0,"12":815.0,"13":815.0,"14":815.0,"15":815.0,"16":815.0,"17":815.0,"18":815.0,"19":815.0,"20":832.0,"21":863.0,"22":905.0,"23":956.0,"24":997.0,"25":1087.0,"26":1170.0,"27":1256.0,"28":1333.0,"29":1392.0,"30":1417.0,"31":1472.0,"32":1492.0,"33":1532.0,"34":1592.0,"35":1622.0,"36":1622.0,"37":1652.0,"38":1692.0,"39":1702.0,"40":1703.0,"41":1770.0,"42":1846.0,"43":1929.0,"44":2061.0,"45":2186.0,"46":2290.0,"47":2387.0,"48":2480.0,"49":2597.0,"50":2684.0,"51":2955.0,"52":3175.0,"53":3392.0,"54":3652.0,"55":3909.0,"56":4139.0,"57":4407.0,"58":4611.0,"59":4918.0,"60":5181.0,"61":5569.0,"62":5945.0,"63":6437.0,"64":7059.0,"65":7629.0,"66":8279.0,"67":8768.0,"68":9133.0,"69":9606.0,"70":9945.0,"71":10711.0,"72":11304.0,"73":11887.0,"74":12494.0,"75":13078.0,"76":13780.0,"77":14331.0,"78":14869.0,"79":14981.0,"80":15126.0,"81":16328.0,"82":16644.0,"83":16941.0,"84":17208.0,"85":18121.0,"86":18453.0,"87":18745.0,"88":19036.0,"89":19341.0,"90":19437.0,"91":19967.0,"92":20257.0,"93":20563.0,"94":20895.0,"95":21202.0,"96":21520.0,"97":21784.0,"98":22102.0,"99":22422.0},"effectiveDate":"2025-11-11","groupHeader":"AVPU"},"AVSW ($1100)":{"rates":{"0":504.0,"1":504.0,"2":504.0,"3":504.0,"4":504.0,"5":464.0,"6":451.0,"7":437.0,"8":423.0,"9":410.0,"10":392.0,"11":396.0,"12":396.0,"13":396.0,"14":396.0,"15":396.0,"16":396.0,"17":396.0,"18":396.0,"19":409.0,"20":410.0,"21":421.0,"22":454.0,"23":472.0,"24":526.0,"25":555.0,"26":583.0,"27":642.0,"28":672.0,"29":702.0,"30":718.0,"31":734.0,"32":744.0,"33":755.0,"34":776.0,"35":788.0,"36":828.0,"37":829.0,"38":850.0,"39":850.0,"40":852.0,"41":921.0,"42":960.0,"43":1004.0,"44":1049.0,"45":1115.0,"46":1159.0,"47":1235.0,"48":1292.0,"49":1353.0,"50":1406.0,"51":1538.0,"52":1622.0,"53":1756.0,"54":1884.0,"55":2003.0,"56":2136.0,"57":2272.0,"58":2405.0,"59":2579.0,"60":2699.0,"61":2889.0,"62":3095.0,"63":3364.0,"64":3674.0,"65":3957.0,"66":4312.0,"67":4560.0,"68":4763.0,"69":5012.0,"70":5210.0,"71":5610.0,"72":5934.0,"73":6203.0,"74":6575.0,"75":6916.0,"76":7216.0,"77":7494.0,"78":7722.0,"79":7972.0,"80":8106.0,"81":8469.0,"82":8660.0,"83":8803.0,"84":8984.0,"85":9399.0,"86":9561.0,"87":9707.0,"88":9866.0,"89":10027.0,"90":10082.0,"91":10375.0,"92":10536.0,"93":10667.0,"94":10856.0,"95":10947.0,"96":11164.0,"97":11294.0,"98":11470.0,"99":11616.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($2250)":{"rates":{"0":397.0,"1":397.0,"2":397.0,"3":397.0,"4":397.0,"5":364.0,"6":353.0,"7":342.0,"8":331.0,"9":320.0,"10":306.0,"11":309.0,"12":309.0,"13":309.0,"14":309.0,"15":309.0,"16":309.0,"17":309.0,"18":309.0,"19":320.0,"20":320.0,"21":328.0,"22":355.0,"23":369.0,"24":413.0,"25":435.0,"26":457.0,"27":504.0,"28":527.0,"29":551.0,"30":556.0,"31":576.0,"32":584.0,"33":592.0,"34":608.0,"35":617.0,"36":651.0,"37":651.0,"38":667.0,"39":667.0,"40":669.0,"41":725.0,"42":755.0,"43":790.0,"44":824.0,"45":876.0,"46":911.0,"47":972.0,"48":1016.0,"49":1065.0,"50":1106.0,"51":1211.0,"52":1277.0,"53":1384.0,"54":1486.0,"55":1580.0,"56":1686.0,"57":1792.0,"58":1898.0,"59":2036.0,"60":2130.0,"61":2280.0,"62":2443.0,"63":2656.0,"64":2900.0,"65":3123.0,"66":3403.0,"67":3599.0,"68":3760.0,"69":3957.0,"70":4113.0,"71":4429.0,"72":4686.0,"73":4897.0,"74":5192.0,"75":5463.0,"76":5697.0,"77":5916.0,"78":6094.0,"79":6299.0,"80":6327.0,"81":6684.0,"82":6836.0,"83":6948.0,"84":7092.0,"85":7423.0,"86":7551.0,"87":7665.0,"88":7792.0,"89":7918.0,"90":7961.0,"91":8195.0,"92":8322.0,"93":8425.0,"94":8574.0,"95":8644.0,"96":8816.0,"97":8919.0,"98":9058.0,"99":9173.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($3750)":{"rates":{"0":334.0,"1":334.0,"2":334.0,"3":334.0,"4":334.0,"5":311.0,"6":303.0,"7":296.0,"8":289.0,"9":281.0,"10":271.0,"11":274.0,"12":274.0,"13":274.0,"14":274.0,"15":274.0,"16":274.0,"17":274.0,"18":274.0,"19":277.0,"20":277.0,"21":285.0,"22":313.0,"23":325.0,"24":361.0,"25":375.0,"26":397.0,"27":436.0,"28":458.0,"29":482.0,"30":487.0,"31":498.0,"32":514.0,"33":532.0,"34":540.0,"35":557.0,"36":574.0,"37":574.0,"38":583.0,"39":583.0,"40":594.0,"41":632.0,"42":653.0,"43":689.0,"44":713.0,"45":774.0,"46":811.0,"47":864.0,"48":891.0,"49":931.0,"50":962.0,"51":1060.0,"52":1122.0,"53":1238.0,"54":1326.0,"55":1395.0,"56":1471.0,"57":1568.0,"58":1678.0,"59":1787.0,"60":1876.0,"61":2011.0,"62":2152.0,"63":2348.0,"64":2566.0,"65":2733.0,"66":2991.0,"67":3162.0,"68":3307.0,"69":3487.0,"70":3622.0,"71":3898.0,"72":4116.0,"73":4329.0,"74":4566.0,"75":4811.0,"76":5014.0,"77":5216.0,"78":5367.0,"79":5544.0,"80":5636.0,"81":5894.0,"82":6017.0,"83":6109.0,"84":6235.0,"85":6528.0,"86":6633.0,"87":6740.0,"88":6857.0,"89":6987.0,"90":7008.0,"91":7211.0,"92":7307.0,"93":7425.0,"94":7556.0,"95":7626.0,"96":7768.0,"97":7851.0,"98":7981.0,"99":8076.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($6875)":{"rates":{"0":249.0,"1":249.0,"2":249.0,"3":249.0,"4":249.0,"5":229.0,"6":223.0,"7":218.0,"8":212.0,"9":207.0,"10":199.0,"11":202.0,"12":202.0,"13":202.0,"14":202.0,"15":202.0,"16":202.0,"17":202.0,"18":202.0,"19":203.0,"20":203.0,"21":209.0,"22":229.0,"23":239.0,"24":265.0,"25":275.0,"26":291.0,"27":320.0,"28":337.0,"29":353.0,"30":357.0,"31":365.0,"32":378.0,"33":391.0,"34":396.0,"35":409.0,"36":421.0,"37":421.0,"38":427.0,"39":427.0,"40":436.0,"41":464.0,"42":480.0,"43":505.0,"44":523.0,"45":568.0,"46":595.0,"47":634.0,"48":653.0,"49":682.0,"50":706.0,"51":777.0,"52":823.0,"53":907.0,"54":972.0,"55":1023.0,"56":1078.0,"57":1150.0,"58":1230.0,"59":1310.0,"60":1375.0,"61":1474.0,"62":1578.0,"63":1722.0,"64":1881.0,"65":2003.0,"66":2192.0,"67":2318.0,"68":2424.0,"69":2556.0,"70":2621.0,"71":2858.0,"72":3017.0,"73":3173.0,"74":3347.0,"75":3526.0,"76":3675.0,"77":3822.0,"78":3933.0,"79":4064.0,"80":4131.0,"81":4319.0,"82":4410.0,"83":4477.0,"84":4569.0,"85":4784.0,"86":4862.0,"87":4941.0,"88":5026.0,"89":5122.0,"90":5136.0,"91":5285.0,"92":5355.0,"93":5441.0,"94":5538.0,"95":5589.0,"96":5694.0,"97":5755.0,"98":5849.0,"99":5918.0},"effectiveDate":"2017-10-18","groupHeader":"Flexi CEO 5 non-US"},"CEO 5 ($3125)":{"rates":{"0":1380.0,"1":1380.0,"2":1380.0,"3":1380.0,"4":1380.0,"5":1240.0,"6":1240.0,"7":1240.0,"8":1240.0,"9":1240.0,"10":1240.0,"11":1240.0,"12":1240.0,"13":1240.0,"14":1240.0,"15":1240.0,"16":1240.0,"17":1240.0,"18":1240.0,"19":1360.0,"20":1380.0,"21":1440.0,"22":1540.0,"23":1620.0,"24":1720.0,"25":1800.0,"26":1960.0,"27":2020.0,"28":2100.0,"29":2120.0,"30":2140.0,"31":2180.0,"32":2240.0,"33":2260.0,"34":2320.0,"35":2360.0,"36":2400.0,"37":2420.0,"38":2480.0,"39":2540.0,"40":2580.0,"41":2620.0,"42":2740.0,"43":2800.0,"44":2940.0,"45":3020.0,"46":3100.0,"47":3200.0,"48":3340.0,"49":3420.0,"50":3560.0,"51":3740.0,"52":3920.0,"53":4100.0,"54":4260.0,"55":4460.0,"56":4620.0,"57":4880.0,"58":5080.0,"59":5300.0,"60":5500.0,"61":6040.0,"62":6700.0,"63":7660.0,"64":8020.0,"65":8380.0,"66":9220.0,"67":10060.0,"68":10700.0,"69":11000.0,"70":11180.0,"71":11540.0,"72":11960.0,"73":12300.0,"74":12780.0,"75":13340.0,"76":13780.0,"77":14400.0,"78":15580.0,"79":15800.0,"80":16560.0,"81":17120.0,"82":17320.0,"83":17600.0,"84":17780.0,"85":18060.0,"86":18200.0,"87":18360.0,"88":18520.0,"89":18660.0,"90":18820.0,"91":18960.0,"92":19160.0,"93":19280.0,"94":19440.0,"95":19600.0,"96":19740.0,"97":19920.0,"98":20040.0,"99":20200.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US":{"rates":{"0":1720.0,"1":1720.0,"2":1720.0,"3":1720.0,"4":1720.0,"5":1660.0,"6":1660.0,"7":1660.0,"8":1660.0,"9":1660.0,"10":1660.0,"11":1660.0,"12":1660.0,"13":1660.0,"14":1660.0,"15":1660.0,"16":1660.0,"17":1660.0,"18":1660.0,"19":1700.0,"20":1740.0,"21":1780.0,"22":1820.0,"23":1900.0,"24":1960.0,"25":2100.0,"26":2180.0,"27":2340.0,"28":2440.0,"29":2540.0,"30":2580.0,"31":2660.0,"32":2740.0,"33":2780.0,"34":2880.0,"35":2940.0,"36":2960.0,"37":3020.0,"38":3080.0,"39":3120.0,"40":3160.0,"41":3200.0,"42":3260.0,"43":3400.0,"44":3620.0,"45":3820.0,"46":4020.0,"47":4140.0,"48":4300.0,"49":4480.0,"50":4580.0,"51":4740.0,"52":4940.0,"53":5120.0,"54":5350.0,"55":5580.0,"56":5880.0,"57":6280.0,"58":6600.0,"59":7040.0,"60":7500.0,"61":8100.0,"62":8800.0,"63":9720.0,"64":10880.0,"65":12000.0,"66":13020.0,"67":13240.0,"68":13540.0,"69":13980.0,"70":14380.0,"71":15600.0,"72":16120.0,"73":16660.0,"74":16980.0,"75":17320.0,"76":18400.0,"77":19680.0,"78":20220.0,"79":20860.0,"80":21180.0,"81":22240.0,"82":22640.0,"83":23020.0,"84":23440.0,"85":23860.0,"86":24260.0,"87":24680.0,"88":25040.0,"89":25460.0,"90":25860.0,"91":26260.0,"92":26660.0,"93":27080.0,"94":27480.0,"95":27900.0,"96":28320.0,"97":28680.0,"98":29080.0,"99":29480.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US ($2000)":{"rates":{"0":800.0,"1":800.0,"2":800.0,"3":800.0,"4":800.0,"5":740.0,"6":740.0,"7":740.0,"8":740.0,"9":740.0,"10":740.0,"11":740.0,"12":740.0,"13":740.0,"14":740.0,"15":740.0,"16":740.0,"17":740.0,"18":740.0,"19":760.0,"20":760.0,"21":760.0,"22":820.0,"23":860.0,"24":920.0,"25":940.0,"26":980.0,"27":1060.0,"28":1100.0,"29":1160.0,"30":1180.0,"31":1200.0,"32":1220.0,"33":1240.0,"34":1260.0,"35":1280.0,"36":1360.0,"37":1360.0,"38":1380.0,"39":1380.0,"40":1400.0,"41":1480.0,"42":1520.0,"43":1580.0,"44":1640.0,"45":1720.0,"46":1820.0,"47":1940.0,"48":2000.0,"49":2080.0,"50":2120.0,"51":2200.0,"52":2260.0,"53":2400.0,"54":2500.0,"55":2580.0,"56":2720.0,"57":2920.0,"58":3080.0,"59":3320.0,"60":3500.0,"61":3780.0,"62":4140.0,"63":4580.0,"64":5080.0,"65":5560.0,"66":6080.0,"67":6160.0,"68":6340.0,"69":6540.0,"70":6760.0,"71":7320.0,"72":7600.0,"73":7800.0,"74":8020.0,"75":8220.0,"76":8640.0,"77":9240.0,"78":9440.0,"79":9960.0,"80":10180.0,"81":10360.0,"82":10580.0,"83":10740.0,"84":10980.0,"85":11100.0,"86":11280.0,"87":11480.0,"88":11660.0,"89":11860.0,"90":12060.0,"91":12260.0,"92":12440.0,"93":12620.0,"94":12840.0,"95":12940.0,"96":13200.0,"97":13340.0,"98":13580.0,"99":13740.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US ($3125)":{"rates":{"0":740.0,"1":740.0,"2":740.0,"3":740.0,"4":740.0,"5":660.0,"6":660.0,"7":660.0,"8":660.0,"9":660.0,"10":660.0,"11":660.0,"12":660.0,"13":660.0,"14":660.0,"15":660.0,"16":660.0,"17":660.0,"18":660.0,"19":700.0,"20":700.0,"21":700.0,"22":740.0,"23":760.0,"24":820.0,"25":860.0,"26":900.0,"27":940.0,"28":980.0,"29":1040.0,"30":1060.0,"31":1080.0,"32":1100.0,"33":1120.0,"34":1160.0,"35":1160.0,"36":1220.0,"37":1220.0,"38":1240.0,"39":1240.0,"40":1260.0,"41":1340.0,"42":1360.0,"43":1420.0,"44":1480.0,"45":1560.0,"46":1640.0,"47":1740.0,"48":1800.0,"49":1860.0,"50":1900.0,"51":1980.0,"52":2020.0,"53":2160.0,"54":2260.0,"55":2320.0,"56":2440.0,"57":2620.0,"58":2780.0,"59":3000.0,"60":3160.0,"61":3400.0,"62":3720.0,"63":4120.0,"64":4580.0,"65":5020.0,"66":5480.0,"67":5540.0,"68":5700.0,"69":5880.0,"70":6100.0,"71":6580.0,"72":6840.0,"73":7020.0,"74":7220.0,"75":7380.0,"76":7780.0,"77":8320.0,"78":8480.0,"79":8980.0,"80":9180.0,"81":9320.0,"82":9520.0,"83":9660.0,"84":9860.0,"85":10000.0,"86":10140.0,"87":10320.0,"88":10480.0,"89":10680.0,"90":10860.0,"91":11040.0,"92":11200.0,"93":11360.0,"94":11540.0,"95":11660.0,"96":11900.0,"97":12000.0,"98":12220.0,"99":12360.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO Essence 2":{"rates":{"0":1000.0,"1":1000.0,"2":1000.0,"3":1000.0,"4":1000.0,"5":1000.0,"6":1000.0,"7":1000.0,"8":1000.0,"9":1000.0,"10":1000.0,"11":1000.0,"12":1000.0,"13":1000.0,"14":1000.0,"15":1000.0,"16":1000.0,"17":1000.0,"18":1000.0,"19":1010.0,"20":1030.0,"21":1040.0,"22":1070.0,"23":1120.0,"24":1150.0,"25":1230.0,"26":1300.0,"27":1380.0,"28":1440.0,"29":1480.0,"30":1510.0,"31":1550.0,"32":1570.0,"33":1610.0,"34":1670.0,"35":1700.0,"36":1710.0,"37":1740.0,"38":1780.0,"39":1790.0,"40":1810.0,"41":1840.0,"42":1880.0,"43":1970.0,"44":2080.0,"45":2190.0,"46":2320.0,"47":2390.0,"48":2480.0,"49":2590.0,"50":2640.0,"51":2740.0,"52":2850.0,"53":2960.0,"54":3090.0,"55":3220.0,"56":3410.0,"57":3630.0,"58":3800.0,"59":4050.0,"60":4320.0,"61":4670.0,"62":5080.0,"63":5560.0,"64":6270.0,"65":6920.0,"66":7500.0,"67":7640.0,"68":7810.0,"69":8060.0,"70":8280.0,"71":8980.0,"72":9290.0,"73":9590.0,"74":9800.0,"75":9980.0,"76":10610.0,"77":11350.0,"78":11660.0,"79":12030.0,"80":12220.0,"81":12810.0,"82":13060.0,"83":13290.0,"84":13510.0,"85":13750.0,"86":14000.0,"87":14220.0,"88":14440.0,"89":14670.0,"90":14910.0,"91":15150.0,"92":15370.0,"93":15600.0,"94":15850.0,"95":16080.0,"96":16330.0,"97":16530.0,"98":16770.0,"99":17010.0},"effectiveDate":"2017-10-18","groupHeader":"CEO Essence 2"},"CEO Essence 2 ($2,000)":{"rates":{"0":480.0,"1":480.0,"2":480.0,"3":480.0,"4":480.0,"5":450.0,"6":450.0,"7":450.0,"8":450.0,"9":450.0,"10":450.0,"11":450.0,"12":450.0,"13":450.0,"14":450.0,"15":450.0,"16":450.0,"17":450.0,"18":450.0,"19":470.0,"20":470.0,"21":470.0,"22":500.0,"23":520.0,"24":570.0,"25":590.0,"26":610.0,"27":660.0,"28":680.0,"29":710.0,"30":730.0,"31":730.0,"32":740.0,"33":750.0,"34":770.0,"35":780.0,"36":820.0,"37":820.0,"38":840.0,"39":840.0,"40":850.0,"41":910.0,"42":930.0,"43":970.0,"44":1000.0,"45":1050.0,"46":1100.0,"47":1170.0,"48":1095.0,"49":1270.0,"50":1300.0,"51":1350.0,"52":1380.0,"53":1450.0,"54":1520.0,"55":1570.0,"56":1670.0,"57":1780.0,"58":1880.0,"59":2020.0,"60":2140.0,"61":2310.0,"62":2520.0,"63":2790.0,"64":3110.0,"65":3410.0,"66":3720.0,"67":3780.0,"68":3870.0,"69":4000.0,"70":4130.0,"71":4470.0,"72":4640.0,"73":4760.0,"74":4900.0,"75":5020.0,"76":5280.0,"77":5640.0,"78":5760.0,"79":6090.0,"80":6230.0,"81":6320.0,"82":6460.0,"83":6570.0,"84":6700.0,"85":6790.0,"86":6900.0,"87":7010.0,"88":7130.0,"89":7240.0,"90":7360.0,"91":7490.0,"92":7610.0,"93":7710.0,"94":7840.0,"95":7910.0,"96":8060.0,"97":8160.0,"98":8280.0,"99":8390.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO Essence 2 ($3,125)":{"rates":{"0":420.0,"1":420.0,"2":420.0,"3":420.0,"4":420.0,"5":390.0,"6":390.0,"7":390.0,"8":390.0,"9":390.0,"10":390.0,"11":390.0,"12":390.0,"13":390.0,"14":390.0,"15":390.0,"16":390.0,"17":390.0,"18":390.0,"19":400.0,"20":400.0,"21":400.0,"22":430.0,"23":440.0,"24":480.0,"25":490.0,"26":520.0,"27":560.0,"28":580.0,"29":600.0,"30":610.0,"31":610.0,"32":630.0,"33":650.0,"34":660.0,"35":680.0,"36":710.0,"37":710.0,"38":720.0,"39":720.0,"40":740.0,"41":770.0,"42":780.0,"43":820.0,"44":840.0,"45":910.0,"46":960.0,"47":1010.0,"48":1040.0,"49":1080.0,"50":1100.0,"51":1150.0,"52":1180.0,"53":1260.0,"54":1320.0,"55":1350.0,"56":1420.0,"57":1520.0,"58":1620.0,"59":1730.0,"60":1830.0,"61":1980.0,"62":2160.0,"63":2400.0,"64":2670.0,"65":2910.0,"66":3180.0,"67":3230.0,"68":3320.0,"69":3430.0,"70":3540.0,"71":3830.0,"72":3970.0,"73":4090.0,"74":4200.0,"75":4310.0,"76":4530.0,"77":4840.0,"78":4940.0,"79":5220.0,"80":5340.0,"81":5460.0,"82":5540.0,"83":5620.0,"84":5740.0,"85":5810.0,"86":5910.0,"87":6000.0,"88":6110.0,"89":6220.0,"90":6310.0,"91":6420.0,"92":6510.0,"93":6610.0,"94":6730.0,"95":6790.0,"96":6920.0,"97":6990.0,"98":7110.0,"99":7190.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO Essence 2 Peral":{"rates":{"0":1070.0,"1":1070.0,"2":1070.0,"3":1070.0,"4":1070.0,"5":1070.0,"6":1070.0,"7":1070.0,"8":1070.0,"9":1070.0,"10":1070.0,"11":1070.0,"12":1070.0,"13":1070.0,"14":1070.0,"15":1070.0,"16":1070.0,"17":1070.0,"18":1070.0,"19":1100.0,"20":1120.0},"effectiveDate":"2017-10-18","groupHeader":"CEO Essence 2 Peral"},"Cancer Guardian ":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":"Cancer Guardian "},"Cancer Guardian Plus":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":null},"Cancer Guardian Mega":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":null}},"planOrder":["AVSW","AVSW ($1100)","AVSW ($2250)","AVSW ($3750)","AVSW ($6875)","CEO 5 ($3125)","CEO 5 non-US","CEO 5 non-US ($2000)","CEO 5 non-US ($3125)","CEO Essence 2","CEO Essence 2 ($2,000)","CEO Essence 2 ($3,125)","CEO Essence 2 Peral","Cancer Guardian ","Cancer Guardian Plus","Cancer Guardian Mega"]},"Female_Rider":{"title":"Female (Rider)","lastChecked":"2025-08-08","plans":{"AVSW":{"rates":{"0":1027.0,"1":1027.0,"2":1027.0,"3":1027.0,"4":1027.0,"5":1001.0,"6":964.0,"7":927.0,"8":889.0,"9":852.0,"10":806.0,"11":815.0,"12":815.0,"13":815.0,"14":815.0,"15":815.0,"16":815.0,"17":815.0,"18":815.0,"19":815.0,"20":832.0,"21":863.0,"22":905.0,"23":956.0,"24":997.0,"25":1087.0,"26":1170.0,"27":1256.0,"28":1333.0,"29":1392.0,"30":1417.0,"31":1472.0,"32":1492.0,"33":1532.0,"34":1592.0,"35":1622.0,"36":1622.0,"37":1652.0,"38":1692.0,"39":1702.0,"40":1703.0,"41":1770.0,"42":1846.0,"43":1929.0,"44":2061.0,"45":2186.0,"46":2290.0,"47":2387.0,"48":2480.0,"49":2597.0,"50":2684.0,"51":2955.0,"52":3175.0,"53":3392.0,"54":3652.0,"55":3909.0,"56":4139.0,"57":4407.0,"58":4611.0,"59":4918.0,"60":5181.0,"61":5569.0,"62":5945.0,"63":6437.0,"64":7059.0,"65":7629.0,"66":8279.0,"67":8768.0,"68":9133.0,"69":9606.0,"70":9945.0,"71":10711.0,"72":11304.0,"73":11887.0,"74":12494.0,"75":13078.0,"76":13780.0,"77":14331.0,"78":14869.0,"79":14981.0,"80":15126.0,"81":16328.0,"82":16644.0,"83":16941.0,"84":17208.0,"85":18121.0,"86":18453.0,"87":18745.0,"88":19036.0,"89":19341.0,"90":19437.0,"91":19967.0,"92":20257.0,"93":20563.0,"94":20895.0,"95":21202.0,"96":21520.0,"97":21784.0,"98":22102.0,"99":22422.0},"effectiveDate":"2025-11-11","groupHeader":"AVPU"},"AVSW ($1100)":{"rates":{"0":504.0,"1":504.0,"2":504.0,"3":504.0,"4":504.0,"5":464.0,"6":451.0,"7":437.0,"8":423.0,"9":410.0,"10":392.0,"11":396.0,"12":396.0,"13":396.0,"14":396.0,"15":396.0,"16":396.0,"17":396.0,"18":396.0,"19":409.0,"20":410.0,"21":421.0,"22":454.0,"23":472.0,"24":526.0,"25":555.0,"26":583.0,"27":642.0,"28":672.0,"29":702.0,"30":718.0,"31":734.0,"32":744.0,"33":755.0,"34":776.0,"35":788.0,"36":828.0,"37":829.0,"38":850.0,"39":850.0,"40":852.0,"41":921.0,"42":960.0,"43":1004.0,"44":1049.0,"45":1115.0,"46":1159.0,"47":1235.0,"48":1292.0,"49":1353.0,"50":1406.0,"51":1538.0,"52":1622.0,"53":1756.0,"54":1884.0,"55":2003.0,"56":2136.0,"57":2272.0,"58":2405.0,"59":2579.0,"60":2699.0,"61":2889.0,"62":3095.0,"63":3364.0,"64":3674.0,"65":3957.0,"66":4312.0,"67":4560.0,"68":4763.0,"69":5012.0,"70":5210.0,"71":5610.0,"72":5934.0,"73":6203.0,"74":6575.0,"75":6916.0,"76":7216.0,"77":7494.0,"78":7722.0,"79":7972.0,"80":8106.0,"81":8469.0,"82":8660.0,"83":8803.0,"84":8984.0,"85":9399.0,"86":9561.0,"87":9707.0,"88":9866.0,"89":10027.0,"90":10082.0,"91":10375.0,"92":10536.0,"93":10667.0,"94":10856.0,"95":10947.0,"96":11164.0,"97":11294.0,"98":11470.0,"99":11616.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($2250)":{"rates":{"0":397.0,"1":397.0,"2":397.0,"3":397.0,"4":397.0,"5":364.0,"6":353.0,"7":342.0,"8":331.0,"9":320.0,"10":306.0,"11":309.0,"12":309.0,"13":309.0,"14":309.0,"15":309.0,"16":309.0,"17":309.0,"18":309.0,"19":320.0,"20":320.0,"21":328.0,"22":355.0,"23":369.0,"24":413.0,"25":435.0,"26":457.0,"27":504.0,"28":527.0,"29":551.0,"30":556.0,"31":576.0,"32":584.0,"33":592.0,"34":608.0,"35":617.0,"36":651.0,"37":651.0,"38":667.0,"39":667.0,"40":669.0,"41":725.0,"42":755.0,"43":790.0,"44":824.0,"45":876.0,"46":911.0,"47":972.0,"48":1016.0,"49":1065.0,"50":1106.0,"51":1211.0,"52":1277.0,"53":1384.0,"54":1486.0,"55":1580.0,"56":1686.0,"57":1792.0,"58":1898.0,"59":2036.0,"60":2130.0,"61":2280.0,"62":2443.0,"63":2656.0,"64":2900.0,"65":3123.0,"66":3403.0,"67":3599.0,"68":3760.0,"69":3957.0,"70":4113.0,"71":4429.0,"72":4686.0,"73":4897.0,"74":5192.0,"75":5463.0,"76":5697.0,"77":5916.0,"78":6094.0,"79":6299.0,"80":6327.0,"81":6684.0,"82":6836.0,"83":6948.0,"84":7092.0,"85":7423.0,"86":7551.0,"87":7665.0,"88":7792.0,"89":7918.0,"90":7961.0,"91":8195.0,"92":8322.0,"93":8425.0,"94":8574.0,"95":8644.0,"96":8816.0,"97":8919.0,"98":9058.0,"99":9173.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($3750)":{"rates":{"0":334.0,"1":334.0,"2":334.0,"3":334.0,"4":334.0,"5":311.0,"6":303.0,"7":296.0,"8":289.0,"9":281.0,"10":271.0,"11":274.0,"12":274.0,"13":274.0,"14":274.0,"15":274.0,"16":274.0,"17":274.0,"18":274.0,"19":277.0,"20":277.0,"21":285.0,"22":313.0,"23":325.0,"24":361.0,"25":375.0,"26":397.0,"27":436.0,"28":458.0,"29":482.0,"30":487.0,"31":498.0,"32":514.0,"33":532.0,"34":540.0,"35":557.0,"36":574.0,"37":574.0,"38":583.0,"39":583.0,"40":594.0,"41":632.0,"42":653.0,"43":689.0,"44":713.0,"45":774.0,"46":811.0,"47":864.0,"48":891.0,"49":931.0,"50":962.0,"51":1060.0,"52":1122.0,"53":1238.0,"54":1326.0,"55":1395.0,"56":1471.0,"57":1568.0,"58":1678.0,"59":1787.0,"60":1876.0,"61":2011.0,"62":2152.0,"63":2348.0,"64":2566.0,"65":2733.0,"66":2991.0,"67":3162.0,"68":3307.0,"69":3487.0,"70":3622.0,"71":3898.0,"72":4116.0,"73":4329.0,"74":4566.0,"75":4811.0,"76":5014.0,"77":5216.0,"78":5367.0,"79":5544.0,"80":5636.0,"81":5894.0,"82":6017.0,"83":6109.0,"84":6235.0,"85":6528.0,"86":6633.0,"87":6740.0,"88":6857.0,"89":6987.0,"90":7008.0,"91":7211.0,"92":7307.0,"93":7425.0,"94":7556.0,"95":7626.0,"96":7768.0,"97":7851.0,"98":7981.0,"99":8076.0},"effectiveDate":"2025-11-11","groupHeader":null},"AVSW ($6875)":{"rates":{"0":249.0,"1":249.0,"2":249.0,"3":249.0,"4":249.0,"5":229.0,"6":223.0,"7":218.0,"8":212.0,"9":207.0,"10":199.0,"11":202.0,"12":202.0,"13":202.0,"14":202.0,"15":202.0,"16":202.0,"17":202.0,"18":202.0,"19":203.0,"20":203.0,"21":209.0,"22":229.0,"23":239.0,"24":265.0,"25":275.0,"26":291.0,"27":320.0,"28":337.0,"29":353.0,"30":357.0,"31":365.0,"32":378.0,"33":391.0,"34":396.0,"35":409.0,"36":421.0,"37":421.0,"38":427.0,"39":427.0,"40":436.0,"41":464.0,"42":480.0,"43":505.0,"44":523.0,"45":568.0,"46":595.0,"47":634.0,"48":653.0,"49":682.0,"50":706.0,"51":777.0,"52":823.0,"53":907.0,"54":972.0,"55":1023.0,"56":1078.0,"57":1150.0,"58":1230.0,"59":1310.0,"60":1375.0,"61":1474.0,"62":1578.0,"63":1722.0,"64":1881.0,"65":2003.0,"66":2192.0,"67":2318.0,"68":2424.0,"69":2556.0,"70":2621.0,"71":2858.0,"72":3017.0,"73":3173.0,"74":3347.0,"75":3526.0,"76":3675.0,"77":3822.0,"78":3933.0,"79":4064.0,"80":4131.0,"81":4319.0,"82":4410.0,"83":4477.0,"84":4569.0,"85":4784.0,"86":4862.0,"87":4941.0,"88":5026.0,"89":5122.0,"90":5136.0,"91":5285.0,"92":5355.0,"93":5441.0,"94":5538.0,"95":5589.0,"96":5694.0,"97":5755.0,"98":5849.0,"99":5918.0},"effectiveDate":"2017-10-18","groupHeader":"Flexi CEO 5 non-US"},"CEO 5 ($3125)":{"rates":{"0":1380.0,"1":1380.0,"2":1380.0,"3":1380.0,"4":1380.0,"5":1240.0,"6":1240.0,"7":1240.0,"8":1240.0,"9":1240.0,"10":1240.0,"11":1240.0,"12":1240.0,"13":1240.0,"14":1240.0,"15":1240.0,"16":1240.0,"17":1240.0,"18":1240.0,"19":1360.0,"20":1380.0,"21":1440.0,"22":1540.0,"23":1620.0,"24":1720.0,"25":1800.0,"26":1960.0,"27":2020.0,"28":2100.0,"29":2120.0,"30":2140.0,"31":2180.0,"32":2240.0,"33":2260.0,"34":2320.0,"35":2360.0,"36":2400.0,"37":2420.0,"38":2480.0,"39":2540.0,"40":2580.0,"41":2620.0,"42":2740.0,"43":2800.0,"44":2940.0,"45":3020.0,"46":3100.0,"47":3200.0,"48":3340.0,"49":3420.0,"50":3560.0,"51":3740.0,"52":3920.0,"53":4100.0,"54":4260.0,"55":4460.0,"56":4620.0,"57":4880.0,"58":5080.0,"59":5300.0,"60":5500.0,"61":6040.0,"62":6700.0,"63":7660.0,"64":8020.0,"65":8380.0,"66":9220.0,"67":10060.0,"68":10700.0,"69":11000.0,"70":11180.0,"71":11540.0,"72":11960.0,"73":12300.0,"74":12780.0,"75":13340.0,"76":13780.0,"77":14400.0,"78":15580.0,"79":15800.0,"80":16560.0,"81":17120.0,"82":17320.0,"83":17600.0,"84":17780.0,"85":18060.0,"86":18200.0,"87":18360.0,"88":18520.0,"89":18660.0,"90":18820.0,"91":18960.0,"92":19160.0,"93":19280.0,"94":19440.0,"95":19600.0,"96":19740.0,"97":19920.0,"98":20040.0,"99":20200.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US":{"rates":{"0":1720.0,"1":1720.0,"2":1720.0,"3":1720.0,"4":1720.0,"5":1660.0,"6":1660.0,"7":1660.0,"8":1660.0,"9":1660.0,"10":1660.0,"11":1660.0,"12":1660.0,"13":1660.0,"14":1660.0,"15":1660.0,"16":1660.0,"17":1660.0,"18":1660.0,"19":1700.0,"20":1740.0,"21":1780.0,"22":1820.0,"23":1900.0,"24":1960.0,"25":2100.0,"26":2180.0,"27":2340.0,"28":2440.0,"29":2540.0,"30":2580.0,"31":2660.0,"32":2740.0,"33":2780.0,"34":2880.0,"35":2940.0,"36":2960.0,"37":3020.0,"38":3080.0,"39":3120.0,"40":3160.0,"41":3200.0,"42":3260.0,"43":3400.0,"44":3620.0,"45":3820.0,"46":4020.0,"47":4140.0,"48":4300.0,"49":4480.0,"50":4580.0,"51":4740.0,"52":4940.0,"53":5120.0,"54":5350.0,"55":5580.0,"56":5880.0,"57":6280.0,"58":6600.0,"59":7040.0,"60":7500.0,"61":8100.0,"62":8800.0,"63":9720.0,"64":10880.0,"65":12000.0,"66":13020.0,"67":13240.0,"68":13540.0,"69":13980.0,"70":14380.0,"71":15600.0,"72":16120.0,"73":16660.0,"74":16980.0,"75":17320.0,"76":18400.0,"77":19680.0,"78":20220.0,"79":20860.0,"80":21180.0,"81":22240.0,"82":22640.0,"83":23020.0,"84":23440.0,"85":23860.0,"86":24260.0,"87":24680.0,"88":25040.0,"89":25460.0,"90":25860.0,"91":26260.0,"92":26660.0,"93":27080.0,"94":27480.0,"95":27900.0,"96":28320.0,"97":28680.0,"98":29080.0,"99":29480.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US ($2000)":{"rates":{"0":800.0,"1":800.0,"2":800.0,"3":800.0,"4":800.0,"5":740.0,"6":740.0,"7":740.0,"8":740.0,"9":740.0,"10":740.0,"11":740.0,"12":740.0,"13":740.0,"14":740.0,"15":740.0,"16":740.0,"17":740.0,"18":740.0,"19":760.0,"20":760.0,"21":760.0,"22":820.0,"23":860.0,"24":920.0,"25":940.0,"26":980.0,"27":1060.0,"28":1100.0,"29":1160.0,"30":1180.0,"31":1200.0,"32":1220.0,"33":1240.0,"34":1260.0,"35":1280.0,"36":1360.0,"37":1360.0,"38":1380.0,"39":1380.0,"40":1400.0,"41":1480.0,"42":1520.0,"43":1580.0,"44":1640.0,"45":1720.0,"46":1820.0,"47":1940.0,"48":2000.0,"49":2080.0,"50":2120.0,"51":2200.0,"52":2260.0,"53":2400.0,"54":2500.0,"55":2580.0,"56":2720.0,"57":2920.0,"58":3080.0,"59":3320.0,"60":3500.0,"61":3780.0,"62":4140.0,"63":4580.0,"64":5080.0,"65":5560.0,"66":6080.0,"67":6160.0,"68":6340.0,"69":6540.0,"70":6760.0,"71":7320.0,"72":7600.0,"73":7800.0,"74":8020.0,"75":8220.0,"76":8640.0,"77":9240.0,"78":9440.0,"79":9960.0,"80":10180.0,"81":10360.0,"82":10580.0,"83":10740.0,"84":10980.0,"85":11100.0,"86":11280.0,"87":11480.0,"88":11660.0,"89":11860.0,"90":12060.0,"91":12260.0,"92":12440.0,"93":12620.0,"94":12840.0,"95":12940.0,"96":13200.0,"97":13340.0,"98":13580.0,"99":13740.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO 5 non-US ($3125)":{"rates":{"0":740.0,"1":740.0,"2":740.0,"3":740.0,"4":740.0,"5":660.0,"6":660.0,"7":660.0,"8":660.0,"9":660.0,"10":660.0,"11":660.0,"12":660.0,"13":660.0,"14":660.0,"15":660.0,"16":660.0,"17":660.0,"18":660.0,"19":700.0,"20":700.0,"21":700.0,"22":740.0,"23":760.0,"24":820.0,"25":860.0,"26":900.0,"27":940.0,"28":980.0,"29":1040.0,"30":1060.0,"31":1080.0,"32":1100.0,"33":1120.0,"34":1160.0,"35":1160.0,"36":1220.0,"37":1220.0,"38":1240.0,"39":1240.0,"40":1260.0,"41":1340.0,"42":1360.0,"43":1420.0,"44":1480.0,"45":1560.0,"46":1640.0,"47":1740.0,"48":1800.0,"49":1860.0,"50":1900.0,"51":1980.0,"52":2020.0,"53":2160.0,"54":2260.0,"55":2320.0,"56":2440.0,"57":2620.0,"58":2780.0,"59":3000.0,"60":3160.0,"61":3400.0,"62":3720.0,"63":4120.0,"64":4580.0,"65":5020.0,"66":5480.0,"67":5540.0,"68":5700.0,"69":5880.0,"70":6100.0,"71":6580.0,"72":6840.0,"73":7020.0,"74":7220.0,"75":7380.0,"76":7780.0,"77":8320.0,"78":8480.0,"79":8980.0,"80":9180.0,"81":9320.0,"82":9520.0,"83":9660.0,"84":9860.0,"85":10000.0,"86":10140.0,"87":10320.0,"88":10480.0,"89":10680.0,"90":10860.0,"91":11040.0,"92":11200.0,"93":11360.0,"94":11540.0,"95":11660.0,"96":11900.0,"97":12000.0,"98":12220.0,"99":12360.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO Essence 2":{"rates":{"0":1000.0,"1":1000.0,"2":1000.0,"3":1000.0,"4":1000.0,"5":1000.0,"6":1000.0,"7":1000.0,"8":1000.0,"9":1000.0,"10":1000.0,"11":1000.0,"12":1000.0,"13":1000.0,"14":1000.0,"15":1000.0,"16":1000.0,"17":1000.0,"18":1000.0,"19":1010.0,"20":1030.0,"21":1040.0,"22":1070.0,"23":1120.0,"24":1150.0,"25":1230.0,"26":1300.0,"27":1380.0,"28":1440.0,"29":1480.0,"30":1510.0,"31":1550.0,"32":1570.0,"33":1610.0,"34":1670.0,"35":1700.0,"36":1710.0,"37":1740.0,"38":1780.0,"39":1790.0,"40":1810.0,"41":1840.0,"42":1880.0,"43":1970.0,"44":2080.0,"45":2190.0,"46":2320.0,"47":2390.0,"48":2480.0,"49":2590.0,"50":2640.0,"51":2740.0,"52":2850.0,"53":2960.0,"54":3090.0,"55":3220.0,"56":3410.0,"57":3630.0,"58":3800.0,"59":4050.0,"60":4320.0,"61":4670.0,"62":5080.0,"63":5560.0,"64":6270.0,"65":6920.0,"66":7500.0,"67":7640.0,"68":7810.0,"69":8060.0,"70":8280.0,"71":8980.0,"72":9290.0,"73":9590.0,"74":9800.0,"75":9980.0,"76":10610.0,"77":11350.0,"78":11660.0,"79":12030.0,"80":12220.0,"81":12810.0,"82":13060.0,"83":13290.0,"84":13510.0,"85":13750.0,"86":14000.0,"87":14220.0,"88":14440.0,"89":14670.0,"90":14910.0,"91":15150.0,"92":15370.0,"93":15600.0,"94":15850.0,"95":16080.0,"96":16330.0,"97":16530.0,"98":16770.0,"99":17010.0},"effectiveDate":"2017-10-18","groupHeader":"CEO Essence 2"},"CEO Essence 2 ($2,000)":{"rates":{"0":480.0,"1":480.0,"2":480.0,"3":480.0,"4":480.0,"5":450.0,"6":450.0,"7":450.0,"8":450.0,"9":450.0,"10":450.0,"11":450.0,"12":450.0,"13":450.0,"14":450.0,"15":450.0,"16":450.0,"17":450.0,"18":450.0,"19":470.0,"20":470.0,"21":470.0,"22":500.0,"23":520.0,"24":570.0,"25":590.0,"26":610.0,"27":660.0,"28":680.0,"29":710.0,"30":730.0,"31":730.0,"32":740.0,"33":750.0,"34":770.0,"35":780.0,"36":820.0,"37":820.0,"38":840.0,"39":840.0,"40":850.0,"41":910.0,"42":930.0,"43":970.0,"44":1000.0,"45":1050.0,"46":1100.0,"47":1170.0,"48":1095.0,"49":1270.0,"50":1300.0,"51":1350.0,"52":1380.0,"53":1450.0,"54":1520.0,"55":1570.0,"56":1670.0,"57":1780.0,"58":1880.0,"59":2020.0,"60":2140.0,"61":2310.0,"62":2520.0,"63":2790.0,"64":3110.0,"65":3410.0,"66":3720.0,"67":3780.0,"68":3870.0,"69":4000.0,"70":4130.0,"71":4470.0,"72":4640.0,"73":4760.0,"74":4900.0,"75":5020.0,"76":5280.0,"77":5640.0,"78":5760.0,"79":6090.0,"80":6230.0,"81":6320.0,"82":6460.0,"83":6570.0,"84":6700.0,"85":6790.0,"86":6900.0,"87":7010.0,"88":7130.0,"89":7240.0,"90":7360.0,"91":7490.0,"92":7610.0,"93":7710.0,"94":7840.0,"95":7910.0,"96":8060.0,"97":8160.0,"98":8280.0,"99":8390.0},"effectiveDate":"2017-10-18","groupHeader":null},"CEO Essence 2 ($3,125)":{"rates":{"0":420.0,"1":420.0,"2":420.0,"3":420.0,"4":420.0,"5":390.0,"6":390.0,"7":390.0,"8":390.0,"9":390.0,"10":390.0,"11":390.0,"12":390.0,"13":390.0,"14":390.0,"15":390.0,"16":390.0,"17":390.0,"18":390.0,"19":400.0,"20":400.0,"21":400.0,"22":430.0,"23":440.0,"24":480.0,"25":490.0,"26":520.0,"27":560.0,"28":580.0,"29":600.0,"30":610.0,"31":610.0,"32":630.0,"33":650.0,"34":660.0,"35":680.0,"36":710.0,"37":710.0,"38":720.0,"39":720.0,"40":740.0,"41":770.0,"42":780.0,"43":820.0,"44":840.0,"45":910.0,"46":960.0,"47":1010.0,"48":1040.0,"49":1080.0,"50":1100.0,"51":1150.0,"52":1180.0,"53":1260.0,"54":1320.0,"55":1350.0,"56":1420.0,"57":1520.0,"58":1620.0,"59":1730.0,"60":1830.0,"61":1980.0,"62":2160.0,"63":2400.0,"64":2670.0,"65":2910.0,"66":3180.0,"67":3230.0,"68":3320.0,"69":3430.0,"70":3540.0,"71":3830.0,"72":3970.0,"73":4090.0,"74":4200.0,"75":4310.0,"76":4530.0,"77":4840.0,"78":4940.0,"79":5220.0,"80":5340.0,"81":5460.0,"82":5540.0,"83":5620.0,"84":5740.0,"85":5810.0,"86":5910.0,"87":6000.0,"88":6110.0,"89":6220.0,"90":6310.0,"91":6420.0,"92":6510.0,"93":6610.0,"94":6730.0,"95":6790.0,"96":6920.0,"97":6990.0,"98":7110.0,"99":7190.0},"effectiveDate":"2017-10-18","groupHeader":null},"Cancer Guardian ":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":"Cancer Guardian "},"Cancer Guardian Plus":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":null},"Cancer Guardian Mega":{"rates":{},"effectiveDate":"2016-09-21","groupHeader":null}},"planOrder":["AVSW","AVSW ($1100)","AVSW ($2250)","AVSW ($3750)","AVSW ($6875)","CEO 5 ($3125)","CEO 5 non-US","CEO 5 non-US ($2000)","CEO 5 non-US ($3125)","CEO Essence 2","CEO Essence 2 ($2,000)","CEO Essence 2 ($3,125)","Cancer Guardian ","Cancer Guardian Plus","Cancer Guardian Mega"]}}};
+
+  </script>
+  <script>
+/**
+ * AIA 醫療儲備計劃 — calculation engine
+ * Follows CALC_SPEC.md (including corrections to Excel defects).
+ */
+(function (root) {
+  "use strict";
+
+  function trimName(s) {
+    return String(s == null ? "" : s).trim();
+  }
+
+  function findPlanKey(plans, planName) {
+    if (!plans || typeof plans !== "object") return null;
+    const target = trimName(planName);
+    if (!target) return null;
+    if (Object.prototype.hasOwnProperty.call(plans, planName)) return planName;
+    if (Object.prototype.hasOwnProperty.call(plans, target)) return target;
+    for (const key of Object.keys(plans)) {
+      if (trimName(key) === target) return key;
+    }
+    return null;
+  }
+
+  function genderLetter(gender) {
+    const g = String(gender == null ? "" : gender).trim().toUpperCase();
+    if (g === "M" || g === "MALE") return "M";
+    if (g === "F" || g === "FEMALE") return "F";
+    return null;
+  }
+
+  function tableKey(gender, rider) {
+    const g = genderLetter(gender);
+    if (g === "M") return rider ? "Male_Rider" : "Male";
+    if (g === "F") return rider ? "Female_Rider" : "Female";
+    return null;
+  }
+
+  function tableLabel(tableName) {
+    switch (tableName) {
+      case "Male":
+        return "Male（純醫療／男士）";
+      case "Female":
+        return "Female（純醫療／女士）";
+      case "Male_Rider":
+        return "Male_Rider（醫療儲備／男士）";
+      case "Female_Rider":
+        return "Female_Rider（醫療儲備／女士）";
+      default:
+        return tableName || "（未知表）";
+    }
+  }
+
+  function money(n) {
+    if (n == null || n === "") return n;
+    const x = Number(n);
+    if (!Number.isFinite(x)) return n;
+    return Math.round((x + Number.EPSILON) * 1000) / 1000;
+  }
+
+  function toNumber(value) {
+    if (value == null || value === "") return null;
+    if (typeof value === "number") return Number.isFinite(value) ? value : null;
+    const n = Number(String(value).replace(/,/g, "").trim());
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function rateAtAge(rates, age) {
+    if (!rates || typeof rates !== "object") return null;
+    if (Object.prototype.hasOwnProperty.call(rates, String(age))) {
+      return toNumber(rates[String(age)]);
+    }
+    if (Object.prototype.hasOwnProperty.call(rates, age)) {
+      return toNumber(rates[age]);
+    }
+    return null;
+  }
+
+  function lookupRate(data, tableName, plan, age) {
+    const tables = data && data.tables;
+    if (!tables || !tables[tableName]) {
+      return { ok: false, rate: null, error: "找不到保費表「" + tableName + "」。" };
+    }
+    const table = tables[tableName];
+    const plans = table.plans || {};
+    const key = findPlanKey(plans, plan);
+    const display = trimName(plan) || String(plan || "");
+    if (!key) {
+      return {
+        ok: false,
+        rate: null,
+        error:
+          "計劃「" +
+          display +
+          "」在 " +
+          tableLabel(tableName) +
+          " 表不存在。",
+      };
+    }
+    const entry = plans[key] || {};
+    const rates = entry.rates || {};
+    const keys = Object.keys(rates);
+    const nonempty = keys.filter(function (k) {
+      return rateAtAge(rates, k) != null;
+    });
+    if (nonempty.length === 0) {
+      return {
+        ok: false,
+        rate: null,
+        error:
+          "計劃「" +
+          display +
+          "」在 " +
+          tableLabel(tableName) +
+          " 表沒有費率（保費表尚未填上保費）。",
+      };
+    }
+    const rate = rateAtAge(rates, age);
+    if (rate == null) {
+      return {
+        ok: false,
+        rate: null,
+        error:
+          "計劃「" +
+          display +
+          "」在 " +
+          tableLabel(tableName) +
+          " 表缺少年齡 " +
+          age +
+          " 的費率。",
+      };
+    }
+    return { ok: true, rate: rate, error: null, key: key };
+  }
+
+  function parseLocalDate(dateStr) {
+    if (!dateStr) return null;
+    const m = String(dateStr).trim().match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (!m) {
+      const d = new Date(dateStr);
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+    return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  }
+
+  function startOfDay(d) {
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }
+
+  /**
+   * Excel status rule:
+   *   last checked < 30 days ago → "Within a month"
+   *   last checked > 90 days ago → "3 months ago"
+   *   otherwise blank
+   */
+  function lastCheckedStatus(dateStr, today) {
+    const now = today ? new Date(today) : new Date();
+    const parsed = parseLocalDate(dateStr);
+    if (!parsed) return { status: "", date: dateStr || "", days: null };
+    const days = Math.floor((startOfDay(now) - startOfDay(parsed)) / 86400000);
+    let status = "";
+    if (days < 30) status = "Within a month";
+    else if (days > 90) status = "3 months ago";
+    return { status: status, date: String(dateStr).slice(0, 10), days: days };
+  }
+
+  function collectMissingAges(data, tableName, plan, ages) {
+    const first = lookupRate(data, tableName, plan, ages[0]);
+    if (!first.ok && first.error && first.error.indexOf("沒有費率") !== -1) {
+      return { empty: true, missing: ages.slice(), error: first.error };
+    }
+    if (!first.ok && first.error && first.error.indexOf("不存在") !== -1) {
+      return { empty: true, missing: ages.slice(), error: first.error };
+    }
+    const missing = [];
+    let existsError = null;
+    for (let i = 0; i < ages.length; i++) {
+      const r = lookupRate(data, tableName, plan, ages[i]);
+      if (!r.ok) {
+        if (r.error && r.error.indexOf("不存在") !== -1) {
+          existsError = r.error;
+          break;
+        }
+        missing.push(ages[i]);
+      }
+    }
+    if (existsError) return { empty: true, missing: ages.slice(), error: existsError };
+    return { empty: false, missing: missing, error: null };
+  }
+
+  function summarizeMissing(data, tableName, plan, ages) {
+    const info = collectMissingAges(data, tableName, plan, ages);
+    if (info.error && info.empty) return info.error;
+    if (info.missing.length === 0) return null;
+    const display = trimName(plan);
+    const shown = info.missing.slice(0, 12).join("、");
+    const extra =
+      info.missing.length > 12 ? " 等 " + info.missing.length + " 個年齡" : "";
+    return (
+      "計劃「" +
+      display +
+      "」在 " +
+      tableLabel(tableName) +
+      " 表缺少年齡 " +
+      shown +
+      extra +
+      " 的費率。"
+    );
+  }
+
+  /**
+   * @param {object} data  premiums.json structure
+   * @param {object} inputs
+   *   name, gender, age, plan, basicPremiumUSD, paymentYears,
+   *   cashValuesUSD: {70,80,90,100}, fx (number)
+   */
+  function compute(data, inputs) {
+    const errors = [];
+    const warnings = [];
+    const result = {
+      ok: false,
+      errors: errors,
+      warnings: warnings,
+      rows: [],
+      totals: { standAlone: null, reserve: null, savings: null },
+      firstYear: { standAlone: null, reserve: null },
+      returnTable: [],
+      meta: {},
+    };
+
+    if (!data || !data.tables) {
+      errors.push("未載入保費表資料。");
+      return result;
+    }
+
+    const name = inputs && inputs.name != null ? String(inputs.name) : "";
+    const gender = genderLetter(inputs && inputs.gender);
+    const age0 = toNumber(inputs && inputs.age);
+    const plan = inputs && inputs.plan != null ? String(inputs.plan) : "";
+    const basic = toNumber(inputs && inputs.basicPremiumUSD);
+    const N = toNumber(inputs && inputs.paymentYears);
+    const fx = toNumber(inputs && inputs.fx);
+    const cash = (inputs && inputs.cashValuesUSD) || {};
+
+    if (!gender) errors.push("請輸入準客戶性別（M 或 F）。");
+    if (age0 == null || !Number.isInteger(age0) || age0 < 0 || age0 > 99) {
+      errors.push("準客戶年齡必須是 0 至 99 的整數。");
+    }
+    if (!trimName(plan)) errors.push("請選擇醫療計劃。");
+    if (basic == null || basic < 0) {
+      errors.push("請輸入基本計劃（Forever Love）年繳保費（美金）。");
+    }
+    if (N == null || !Number.isInteger(N) || N < 1) {
+      errors.push("供款年期必須是大於或等於 1 的整數。");
+    }
+    if (fx == null || fx <= 0) errors.push("請輸入有效的匯率。");
+
+    if (errors.length) return result;
+
+    const planTable = tableKey(gender, false);
+    const riderTable = tableKey(gender, true);
+    const standAges = [];
+    for (let a = age0; a <= 99; a++) standAges.push(a);
+    const payEnd = Math.min(99, age0 + N - 1);
+    const reserveAges = [];
+    for (let a = age0; a <= payEnd; a++) reserveAges.push(a);
+
+    const planErr = summarizeMissing(data, planTable, plan, standAges);
+    if (planErr) errors.push(planErr);
+    const riderErr = summarizeMissing(data, riderTable, plan, reserveAges);
+    if (riderErr) errors.push(riderErr);
+    if (errors.length) return result;
+
+    const rows = [];
+    let sumSA = 0;
+    let sumRes = 0;
+    let firstSA = null;
+    let firstRes = null;
+
+    for (let a = age0; a <= 99; a++) {
+      const planLookup = lookupRate(data, planTable, plan, a);
+      const saPrem = money(planLookup.rate * fx);
+      const y = a - age0;
+      let resPrem = null;
+      if (y >= 0 && y <= N - 1 && a <= 99) {
+        const riderLookup = lookupRate(data, riderTable, plan, a);
+        resPrem = money((riderLookup.rate + basic) * fx);
+        sumRes = money(sumRes + resPrem);
+        if (firstRes == null) firstRes = resPrem;
+      }
+      sumSA = money(sumSA + saPrem);
+      if (firstSA == null) firstSA = saPrem;
+      rows.push({ age: a, standAlone: saPrem, reserve: resPrem, yearIndex: y });
+    }
+
+    const savings = sumSA === 0 ? null : (sumSA - sumRes) / sumSA;
+
+    function paidUpTo(cutoffInclusive) {
+      let s = 0;
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].age <= cutoffInclusive) s = money(s + rows[i].standAlone);
+      }
+      return s;
+    }
+
+    const milestones = [70, 80, 90, 100];
+    const returnTable = milestones.map(function (m) {
+      const cv = toNumber(cash[m] != null ? cash[m] : cash[String(m)]);
+      const surrender = cv == null ? null : money(cv * fx);
+      const saPaid = m === 100 ? sumSA : paidUpTo(m - 1);
+      return {
+        age: m,
+        standAlonePaid: saPaid,
+        standAloneReturn: 0,
+        reservePaid: sumRes,
+        surrender: surrender,
+      };
+    });
+
+    result.ok = true;
+    result.rows = rows;
+    result.totals = { standAlone: sumSA, reserve: sumRes, savings: savings };
+    result.firstYear = { standAlone: firstSA, reserve: firstRes };
+    result.returnTable = returnTable;
+    result.meta = {
+      name: name,
+      gender: gender,
+      age: age0,
+      plan: trimName(plan),
+      basicPremiumUSD: basic,
+      paymentYears: N,
+      fx: fx,
+      paymentAgeEnd: payEnd,
+    };
+    return result;
+  }
+
+  const AIACalc = {
+    trimName: trimName,
+    findPlanKey: findPlanKey,
+    genderLetter: genderLetter,
+    tableKey: tableKey,
+    tableLabel: tableLabel,
+    money: money,
+    toNumber: toNumber,
+    lookupRate: lookupRate,
+    lastCheckedStatus: lastCheckedStatus,
+    compute: compute,
+  };
+
+  root.AIACalc = AIACalc;
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = AIACalc;
+  }
+})(typeof window !== "undefined" ? window : globalThis);
+
+  </script>
+  <script>
+/* AIA 醫療儲備計劃 — UI */
+(function () {
+  "use strict";
+
+  const LS_DATA = "aia-medical-reserve-data";
+  const LS_INPUTS = "aia-medical-reserve-inputs";
+  const MILESTONES = [70, 80, 90, 100];
+  const TABLE_KEYS = ["Male", "Male_Rider", "Female", "Female_Rider"];
+
+  let DATA = null;
+  let dataSource = "default";
+  let pendingImport = null;
+
+  const $ = function (id) {
+    return document.getElementById(id);
+  };
+
+  function escapeHtml(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function formatMoney(n) {
+    if (n == null || n === "" || Number.isNaN(Number(n))) return "—";
+    return Number(n).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 3,
+    });
+  }
+
+  function formatPct(ratio) {
+    if (ratio == null || Number.isNaN(ratio)) return "—";
+    return (ratio * 100).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }) + "%";
+  }
+
+  function toast(msg, isError) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.toggle("error", !!isError);
+    el.classList.add("visible");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () {
+      el.classList.remove("visible");
+    }, 3200);
+  }
+
+  function deepClone(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
+  function reminderClass(title) {
+    const t = title || "";
+    if (/SGH|特級健康/.test(t)) return "sgh2";
+    if (/CEO 5|至尊醫療 5/.test(t)) return "ceo5";
+    return "essence";
+  }
+
+  function renderReminders() {
+    const body = $("reminder-body");
+    const groups = (DATA && DATA.reminderPlans) || [];
+    body.innerHTML = groups
+      .map(function (g) {
+        const items = (g.items || [])
+          .map(function (it) {
+            return '<div class="group-item">' + escapeHtml(it) + "</div>";
+          })
+          .join("");
+        return (
+          '<div class="reminder-group ' +
+          reminderClass(g.title) +
+          '"><div class="group-title">' +
+          escapeHtml(g.title) +
+          "</div>" +
+          items +
+          "</div>"
+        );
+      })
+      .join("");
+  }
+
+  function currentMenu() {
+    if (DATA && Array.isArray(DATA.menu) && DATA.menu.length) return DATA.menu;
+    return [];
+  }
+
+  function fillPlanSelect(sel, selected) {
+    const menu = currentMenu();
+    const cur = selected != null ? String(selected) : sel.value;
+    sel.innerHTML = menu
+      .map(function (name) {
+        return (
+          '<option value="' +
+          escapeHtml(name) +
+          '">' +
+          escapeHtml(name) +
+          "</option>"
+        );
+      })
+      .join("");
+    if (cur) {
+      const match = menu.find(function (n) {
+        return n === cur || AIACalc.trimName(n) === AIACalc.trimName(cur);
+      });
+      if (match) sel.value = match;
+    }
+  }
+
+  function refreshPlanDropdowns(selected) {
+    fillPlanSelect($("inp-plan"), selected);
+    fillPlanSelect($("inp-rename-from"), selected);
+    fillPlanSelect($("inp-edit-plan"), $("inp-edit-plan").value || selected);
+  }
+
+  function updateLastCheckedDisplay() {
+    const dateStr = DATA && DATA.lastChecked;
+    const info = AIACalc.lastCheckedStatus(dateStr);
+    $("last-checked-date").textContent = info.date || "—";
+    $("last-checked-status").textContent = info.status || "";
+    const adminDate = $("inp-last-checked");
+    if (adminDate && info.date) adminDate.value = info.date;
+    const preview = $("admin-status-preview");
+    if (preview) {
+      preview.textContent = info.status
+        ? info.status + (info.days != null ? "（" + info.days + " 日前）" : "")
+        : info.days != null
+        ? info.days + " 日前（30–90 日，不顯示狀態）"
+        : "";
+    }
+  }
+
+  function updateDataSourceLabel() {
+    const map = {
+      server: "保費表來源：伺服器",
+      localStorage: "保費表來源：本機暫存",
+      default: "保費表來源：內建資料",
+    };
+    $("data-source-label").textContent = map[dataSource] || "";
+  }
+
+  function collectInputs() {
+    return {
+      name: $("inp-name").value.trim(),
+      gender: $("inp-gender").value,
+      age: $("inp-age").value === "" ? null : Number($("inp-age").value),
+      plan: $("inp-plan").value,
+      basicPremiumUSD:
+        $("inp-basic").value === "" ? null : Number($("inp-basic").value),
+      paymentYears:
+        $("inp-years").value === "" ? null : Number($("inp-years").value),
+      cashValuesUSD: {
+        70: $("cv-70").value === "" ? null : Number($("cv-70").value),
+        80: $("cv-80").value === "" ? null : Number($("cv-80").value),
+        90: $("cv-90").value === "" ? null : Number($("cv-90").value),
+        100: $("cv-100").value === "" ? null : Number($("cv-100").value),
+      },
+      fxUSD: $("inp-fx-usd").value === "" ? null : Number($("inp-fx-usd").value),
+      fxHKD: $("inp-fx-hkd").value === "" ? null : Number($("inp-fx-hkd").value),
+    };
+  }
+
+  function applyInputs(inp) {
+    if (!inp) return;
+    if (inp.name != null) $("inp-name").value = inp.name;
+    if (inp.gender) $("inp-gender").value = AIACalc.genderLetter(inp.gender) || inp.gender;
+    if (inp.age != null) $("inp-age").value = inp.age;
+    if (inp.plan) fillPlanSelect($("inp-plan"), inp.plan);
+    if (inp.basicPremiumUSD != null) $("inp-basic").value = inp.basicPremiumUSD;
+    if (inp.paymentYears != null) $("inp-years").value = inp.paymentYears;
+    const cv = inp.cashValuesUSD || {};
+    MILESTONES.forEach(function (a) {
+      const v = cv[a] != null ? cv[a] : cv[String(a)];
+      if (v != null) $("cv-" + a).value = v;
+    });
+    const fx = inp.fx || {};
+    const usd = inp.fxUSD != null ? inp.fxUSD : fx.USD;
+    const hkd = inp.fxHKD != null ? inp.fxHKD : fx.HKD;
+    if (usd != null) $("inp-fx-usd").value = usd;
+    if (hkd != null) $("inp-fx-hkd").value = hkd;
+  }
+
+  function persistInputs() {
+    try {
+      localStorage.setItem(LS_INPUTS, JSON.stringify(collectInputs()));
+    } catch (e) {}
+  }
+
+  function persistDataLocal() {
+    try {
+      localStorage.setItem(LS_DATA, JSON.stringify(DATA));
+    } catch (e) {}
+  }
+
+  function showErrors(el, errors) {
+    if (!errors || !errors.length) {
+      el.classList.remove("visible");
+      el.innerHTML = "";
+      return false;
+    }
+    el.innerHTML =
+      "<h3>未能計算 / Cannot calculate</h3><ul>" +
+      errors.map(function (e) { return "<li>" + escapeHtml(e) + "</li>"; }).join("") +
+      "</ul>";
+    el.classList.add("visible");
+    return true;
+  }
+
+  function computeFor(currency) {
+    const inp = collectInputs();
+    const fx = currency === "USD" ? inp.fxUSD : inp.fxHKD;
+    return AIACalc.compute(DATA, {
+      name: inp.name,
+      gender: inp.gender,
+      age: inp.age,
+      plan: inp.plan,
+      basicPremiumUSD: inp.basicPremiumUSD,
+      paymentYears: inp.paymentYears,
+      cashValuesUSD: inp.cashValuesUSD,
+      fx: fx,
+    });
+  }
+
+  function validateForCompare(currency) {
+    const result = computeFor(currency);
+    showErrors($("form-errors"), result.ok ? [] : result.errors);
+    return result;
+  }
+
+  let currentView = "start";
+
+  function setHash(hash) {
+    try {
+      if ((location.hash || "") === hash) return;
+      // replaceState is often blocked on iOS file:// pages; hashchange is also unreliable there.
+      if (typeof history !== "undefined" && history.replaceState && location.protocol !== "file:") {
+        history.replaceState(null, "", hash);
+      } else {
+        location.hash = hash;
+      }
+    } catch (e) {}
+  }
+
+  function openCompare(currency) {
+    persistInputs();
+    const result = validateForCompare(currency);
+    if (!result.ok) {
+      $("form-errors").scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    showView("compare");
+    renderCompare(currency);
+    setHash(currency === "USD" ? "#/usd" : "#/hkd");
+  }
+
+  function goHome() {
+    showView("start");
+    updateLastCheckedDisplay();
+    setHash("#/");
+  }
+
+  function openAdmin() {
+    showView("admin");
+    updateLastCheckedDisplay();
+    refreshPlanDropdowns($("inp-plan").value);
+    renderPlanList();
+    if (!$("inp-edit-plan").value && currentMenu().length) {
+      $("inp-edit-plan").value = $("inp-plan").value || currentMenu()[0];
+    }
+    renderRateEditor();
+    setHash("#/admin");
+  }
+
+  function renderPremiumTable(rows, kind) {
+    const isRes = kind === "reserve";
+    let html =
+      '<table class="premium-table"><thead><tr>' +
+      '<th>Age</th><th class="col-prem">Premium</th>' +
+      (isRes ? "<th>Years of payment</th>" : "") +
+      "</tr></thead><tbody>";
+    rows.forEach(function (r, i) {
+      const prem = isRes ? r.reserve : r.standAlone;
+      html +=
+        "<tr><td class='age'>" +
+        r.age +
+        "</td><td" +
+        (prem == null ? " class='blank'" : "") +
+        ">" +
+        (prem == null ? "" : formatMoney(prem)) +
+        "</td>";
+      if (isRes) {
+        html +=
+          "<td class='age'>" +
+          (i === 0 && resultMetaPaymentYears() != null
+            ? escapeHtml(String(resultMetaPaymentYears()))
+            : "") +
+          "</td>";
+      }
+      html += "</tr>";
+    });
+    html += "</tbody></table>";
+    return html;
+  }
+
+  let lastMeta = null;
+  function resultMetaPaymentYears() {
+    return lastMeta && lastMeta.paymentYears;
+  }
+
+  function renderReturnTable(result, currency) {
+    const unit = currency === "USD" ? "USD" : "HKD";
+    let html =
+      '<div class="return-grid">' +
+      '<div class="h-age"></div>' +
+      '<div class="h-sa">純醫療計劃（租樓式）</div>' +
+      '<div class="h-res">醫療儲備計劃（供樓式）</div>' +
+      '<div class="h-age"></div>' +
+      '<div><div class="return-sub"><div>Premium Paid<br>已付保費總和</div><div>Return<br>回報</div></div></div>' +
+      '<div><div class="return-sub"><div>Premium Paid<br>已付保費總和</div><div>Surrender Value<br>退保價值</div></div></div>';
+    result.returnTable.forEach(function (row) {
+      html +=
+        '<div class="age-cell">' +
+        row.age +
+        "</div>" +
+        '<div><div class="return-sub"><div>' +
+        formatMoney(row.standAlonePaid) +
+        "</div><div>" +
+        formatMoney(row.standAloneReturn) +
+        "</div></div></div>" +
+        '<div><div class="return-sub"><div>' +
+        formatMoney(row.reservePaid) +
+        "</div><div>" +
+        (row.surrender == null ? "—" : formatMoney(row.surrender)) +
+        "</div></div></div>";
+    });
+    html += "</div>";
+    html +=
+      '<p class="help-muted" style="margin-top:8px;">金額單位：' +
+      unit +
+      "　Stand-alone premiums at 70/80/90 are sums of ages ≤ 69/79/89; age 100 equals total paid. Reserve premiums are the payment-period total. Surrender value = cash value (USD) × exchange rate.</p>";
+    $("return-table").innerHTML = html;
+  }
+
+  function renderCompare(currency) {
+    const result = computeFor(currency);
+    lastMeta = result.meta || null;
+    const inp = collectInputs();
+    const fx = currency === "USD" ? inp.fxUSD : inp.fxHKD;
+    $("compare-currency-tag").textContent =
+      currency === "USD"
+        ? "美金版本　USD to USD = " + fx
+        : "港元版本　USD to HKD = " + fx;
+
+    $("compare-meta").innerHTML =
+      "<div><strong>" +
+      escapeHtml(inp.name || "—") +
+      "</strong></div>" +
+      "<div>Gender: <strong>" +
+      escapeHtml(inp.gender || "—") +
+      "</strong></div>" +
+      "<div>Age: <strong>" +
+      escapeHtml(String(inp.age == null ? "—" : inp.age)) +
+      "</strong></div>" +
+      "<div>Class: <strong>" +
+      escapeHtml(inp.plan || "—") +
+      "</strong></div>";
+
+    if (!result.ok) {
+      showErrors($("compare-errors"), result.errors);
+      $("table-standalone").innerHTML = "";
+      $("table-reserve").innerHTML = "";
+      $("total-sa").textContent = "—";
+      $("total-res").textContent = "—";
+      $("total-save").textContent = "—";
+      $("return-table").innerHTML = "";
+      $("pay-years-note").textContent = "";
+      return;
+    }
+    showErrors($("compare-errors"), []);
+    $("table-standalone").innerHTML = renderPremiumTable(result.rows, "sa");
+    $("table-reserve").innerHTML = renderPremiumTable(result.rows, "reserve");
+    $("total-sa").textContent = formatMoney(result.totals.standAlone);
+    $("total-res").textContent = formatMoney(result.totals.reserve);
+    $("total-save").textContent = formatPct(result.totals.savings);
+    $("pay-years-note").textContent =
+      "供款年期 " +
+      result.meta.paymentYears +
+      " 年（年齡 " +
+      result.meta.age +
+      "–" +
+      result.meta.paymentAgeEnd +
+      "）。其後醫療儲備計劃無需再繳保費。純醫療計劃則繳至 99 歲。";
+    renderReturnTable(result, currency);
+  }
+
+  /* ---------- Admin ---------- */
+
+  function planCoverage(planName) {
+    const out = {};
+    TABLE_KEYS.forEach(function (tk) {
+      const plans = DATA.tables[tk] && DATA.tables[tk].plans;
+      const key = plans ? AIACalc.findPlanKey(plans, planName) : null;
+      if (!key) {
+        out[tk] = { present: false, count: 0 };
+        return;
+      }
+      const rates = (plans[key].rates || {});
+      const count = Object.keys(rates).filter(function (a) {
+        return AIACalc.toNumber(rates[a]) != null;
+      }).length;
+      out[tk] = { present: true, count: count, key: key };
+    });
+    return out;
+  }
+
+  function renderPlanList() {
+    const menu = currentMenu();
+    let html =
+      "<thead><tr><th>計劃 / Plan</th><th>Male</th><th>Male_Rider</th><th>Female</th><th>Female_Rider</th><th>備註</th></tr></thead><tbody>";
+    menu.forEach(function (name) {
+      const cov = planCoverage(name);
+      const notes = [];
+      TABLE_KEYS.forEach(function (tk) {
+        if (!cov[tk].present) notes.push(tk + " 沒有此計劃");
+        else if (cov[tk].count === 0) notes.push(tk + " 未有費率");
+        else if (cov[tk].count < 100) notes.push(tk + " 只有 " + cov[tk].count + " 個年齡");
+      });
+      html +=
+        "<tr><td>" +
+        escapeHtml(name) +
+        "</td>" +
+        TABLE_KEYS.map(function (tk) {
+          if (!cov[tk].present) return "<td class='counts gap'>—</td>";
+          if (cov[tk].count === 0) return "<td class='counts gap'>0</td>";
+          return "<td class='counts'>" + cov[tk].count + "</td>";
+        }).join("") +
+        "<td class='gap'>" +
+        escapeHtml(notes.join("；") || "") +
+        "</td></tr>";
+    });
+    html += "</tbody>";
+    $("plan-list").innerHTML = html;
+  }
+
+  function ensurePlanBucket(tableKey, planName) {
+    const table = DATA.tables[tableKey];
+    if (!table.plans) table.plans = {};
+    if (!table.planOrder) table.planOrder = [];
+    const existing = AIACalc.findPlanKey(table.plans, planName);
+    if (existing) return existing;
+    table.plans[planName] = { rates: {}, effectiveDate: null, groupHeader: null };
+    table.planOrder.push(planName);
+    return planName;
+  }
+
+  function addPlan(name) {
+    const planName = AIACalc.trimName(name);
+    if (!planName) {
+      toast("請輸入計劃名稱。", true);
+      return;
+    }
+    if (currentMenu().some(function (n) { return AIACalc.trimName(n) === planName; })) {
+      toast("名單中已有相同計劃。", true);
+      return;
+    }
+    DATA.menu = currentMenu().concat([planName]);
+    TABLE_KEYS.forEach(function (tk) {
+      ensurePlanBucket(tk, planName);
+    });
+    refreshPlanDropdowns(planName);
+    renderPlanList();
+    renderRateEditor();
+    persistDataLocal();
+    toast("已新增計劃「" + planName + "」。請填寫費率後儲存。");
+  }
+
+  function renamePlan(fromName, toName) {
+    const src = AIACalc.trimName(fromName);
+    const dest = AIACalc.trimName(toName);
+    if (!src || !dest) {
+      toast("請選擇計劃並輸入新名稱。", true);
+      return;
+    }
+    if (src === dest) return;
+    if (currentMenu().some(function (n) { return AIACalc.trimName(n) === dest && AIACalc.trimName(n) !== src; })) {
+      toast("新名稱與現有計劃重複。", true);
+      return;
+    }
+    DATA.menu = currentMenu().map(function (n) {
+      return AIACalc.trimName(n) === src ? dest : n;
+    });
+    TABLE_KEYS.forEach(function (tk) {
+      const table = DATA.tables[tk];
+      const key = AIACalc.findPlanKey(table.plans, src);
+      if (!key) return;
+      if (key !== dest) {
+        table.plans[dest] = table.plans[key];
+        delete table.plans[key];
+      }
+      table.planOrder = (table.planOrder || []).map(function (n) {
+        return AIACalc.trimName(n) === src ? dest : n;
+      });
+    });
+    if (AIACalc.trimName($("inp-plan").value) === src) $("inp-plan").value = dest;
+    refreshPlanDropdowns(dest);
+    renderPlanList();
+    renderRateEditor();
+    persistDataLocal();
+    toast("已將計劃重新命名為「" + dest + "」。");
+  }
+
+  function removePlan(name) {
+    const src = AIACalc.trimName(name);
+    if (!src) return;
+    if (!confirm("確定刪除計劃「" + src + "」？四張保費表的相關欄都會移除。")) return;
+    DATA.menu = currentMenu().filter(function (n) {
+      return AIACalc.trimName(n) !== src;
+    });
+    TABLE_KEYS.forEach(function (tk) {
+      const table = DATA.tables[tk];
+      const key = AIACalc.findPlanKey(table.plans, src);
+      if (key) delete table.plans[key];
+      table.planOrder = (table.planOrder || []).filter(function (n) {
+        return AIACalc.trimName(n) !== src;
+      });
+    });
+    refreshPlanDropdowns();
+    renderPlanList();
+    renderRateEditor();
+    persistDataLocal();
+    toast("已刪除計劃「" + src + "」。");
+  }
+
+  function renderRateEditor() {
+    const plan = $("inp-edit-plan").value;
+    const table = $("rate-editor");
+    if (!plan) {
+      table.innerHTML = "";
+      return;
+    }
+    const keys = {};
+    TABLE_KEYS.forEach(function (tk) {
+      const plans = DATA.tables[tk].plans || {};
+      keys[tk] = AIACalc.findPlanKey(plans, plan);
+    });
+    let html =
+      "<thead><tr><th>Age</th><th>Male 純醫療</th><th>Male 醫療儲備</th><th>Female 純醫療</th><th>Female 醫療儲備</th></tr></thead><tbody>";
+    for (let age = 0; age <= 99; age++) {
+      html += "<tr><td class='age'>" + age + "</td>";
+      TABLE_KEYS.forEach(function (tk) {
+        const key = keys[tk];
+        if (!key) {
+          html += "<td class='na'>—</td>";
+          return;
+        }
+        const rates = DATA.tables[tk].plans[key].rates || {};
+        const val = rates[String(age)];
+        const missing = val == null || val === "";
+        html +=
+          "<td><input data-table='" +
+          tk +
+          "' data-plan='" +
+          escapeHtml(key) +
+          "' data-age='" +
+          age +
+          "' type='number' step='any' value='" +
+          (missing ? "" : escapeHtml(String(val))) +
+          "' class='" +
+          (missing ? "missing" : "") +
+          "'></td>";
+      });
+      html += "</tr>";
+    }
+    html += "</tbody>";
+    table.innerHTML = html;
+  }
+
+  function onRateInput(ev) {
+    const inp = ev.target;
+    if (!inp || !inp.getAttribute) return;
+    const tk = inp.getAttribute("data-table");
+    const plan = inp.getAttribute("data-plan");
+    const age = inp.getAttribute("data-age");
+    if (!tk || !plan || age == null) return;
+    const entry = DATA.tables[tk].plans[plan];
+    if (!entry.rates) entry.rates = {};
+    const raw = inp.value.trim();
+    if (raw === "") {
+      delete entry.rates[String(age)];
+      inp.classList.add("missing");
+    } else {
+      const n = Number(raw);
+      if (!Number.isFinite(n)) return;
+      entry.rates[String(age)] = n;
+      inp.classList.remove("missing");
+    }
+    persistDataLocal();
+    renderPlanList();
+  }
+
+  function applyLastChecked(dateStr) {
+    DATA.lastChecked = dateStr;
+    TABLE_KEYS.forEach(function (tk) {
+      if (DATA.tables[tk]) DATA.tables[tk].lastChecked = dateStr;
+    });
+    updateLastCheckedDisplay();
+    persistDataLocal();
+  }
+
+  function dataJsPayload(obj) {
+    return (
+      "/* Auto-generated from data/premiums.json. Regenerated when saving via server.py. */\n" +
+      "window.DEFAULT_DATA = " +
+      JSON.stringify(obj) +
+      ";\n"
+    );
+  }
+
+  function downloadText(filename, text, mime) {
+    const blob = new Blob([text], { type: mime || "application/octet-stream" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  async function saveToServer() {
+    persistDataLocal();
+    try {
+      const res = await fetch("/api/data", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(DATA),
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      dataSource = "server";
+      updateDataSourceLabel();
+      toast("已儲存到伺服器 data/premiums.json，並更新了 js/data.js。");
+      return true;
+    } catch (err) {
+      toast("伺服器未開啟，已先存到本機瀏覽器。可用「下載 JSON」備份，或執行 python3 server.py 後再儲存。", true);
+      return false;
+    }
+  }
+
+  async function importXlsx(file) {
+    const report = $("import-report");
+    report.textContent = "正在匯入…";
+    const body = new FormData();
+    body.append("file", file);
+    try {
+      const res = await fetch("/api/import-xlsx", { method: "POST", body: body });
+      const payload = await res.json();
+      if (!res.ok || !payload.ok) {
+        throw new Error((payload && payload.error) || "匯入失敗");
+      }
+      pendingImport = payload.data;
+      const warns = payload.warnings || [];
+      const menu = (payload.data.menu || []).join("、");
+      report.innerHTML =
+        "已解析「" +
+        escapeHtml(file.name) +
+        "」。計劃：" +
+        escapeHtml(menu) +
+        "。最後檢查日期：" +
+        escapeHtml(payload.data.lastChecked || "—") +
+        "。" +
+        (warns.length
+          ? "<br>注意：" + warns.map(function (w) { return escapeHtml(w); }).join("；")
+          : "") +
+        "<br>請按「套用匯入結果」，再按「儲存保費表」。";
+      $("btn-apply-import").disabled = false;
+      toast("Excel 已解析，請檢查後套用。");
+    } catch (err) {
+      pendingImport = null;
+      $("btn-apply-import").disabled = true;
+      report.textContent =
+        "匯入失敗：" +
+        (err && err.message ? err.message : err) +
+        "。匯入功能需要先執行 python3 server.py。";
+      toast("匯入失敗。請確認已啟動本機伺服器。", true);
+    }
+  }
+
+  function applyImport() {
+    if (!pendingImport) return;
+    const keep = {
+      version: DATA.version,
+      reminderPlans: DATA.reminderPlans,
+      defaults: DATA.defaults,
+    };
+    DATA = pendingImport;
+    if (!DATA.version) DATA.version = keep.version;
+    if (!DATA.reminderPlans) DATA.reminderPlans = keep.reminderPlans;
+    if (!DATA.defaults) DATA.defaults = keep.defaults;
+    pendingImport = null;
+    $("btn-apply-import").disabled = true;
+    persistDataLocal();
+    refreshPlanDropdowns();
+    renderReminders();
+    updateLastCheckedDisplay();
+    renderPlanList();
+    renderRateEditor();
+    updateDataSourceLabel();
+    toast("已套用匯入的保費表。請按「儲存保費表」寫入檔案。");
+  }
+
+  /* ---------- Routing ---------- */
+
+  function showView(name) {
+    currentView = name;
+    $("view-start").classList.toggle("active", name === "start");
+    $("view-compare").classList.toggle("active", name === "compare");
+    $("view-admin").classList.toggle("active", name === "admin");
+    window.scrollTo(0, 0);
+  }
+
+  function route() {
+    const hash = (location.hash || "").toLowerCase();
+    if (hash === "#/admin") {
+      openAdmin();
+      return;
+    }
+    if (hash === "#/usd" || hash === "#/compare/usd") {
+      openCompare("USD");
+      return;
+    }
+    if (hash === "#/hkd" || hash === "#/compare/hkd") {
+      openCompare("HKD");
+      return;
+    }
+    // iPhone / file:// often clears or never sets the hash. Do not bounce back to the
+    // homepage if we already opened a view by tapping a button.
+    if (!hash || hash === "#" || hash === "#/") {
+      if (currentView !== "start") return;
+      showView("start");
+      updateLastCheckedDisplay();
+      return;
+    }
+    showView("start");
+    updateLastCheckedDisplay();
+  }
+
+  /* ---------- Data load ---------- */
+
+  async function fetchJson(url, options, ms) {
+    const ctrl = new AbortController();
+    const t = setTimeout(function () { ctrl.abort(); }, ms || 1200);
+    try {
+      const res = await fetch(url, Object.assign({ signal: ctrl.signal }, options || {}));
+      return res;
+    } finally {
+      clearTimeout(t);
+    }
+  }
+
+  async function loadData() {
+    try {
+      const res = await fetchJson("/api/data", { cache: "no-store" }, 1200);
+      if (res.ok) {
+        DATA = await res.json();
+        dataSource = "server";
+        persistDataLocal();
+        return;
+      }
+    } catch (e) {}
+    try {
+      const raw = localStorage.getItem(LS_DATA);
+      if (raw) {
+        DATA = JSON.parse(raw);
+        dataSource = "localStorage";
+        return;
+      }
+    } catch (e) {}
+    DATA = deepClone(window.DEFAULT_DATA);
+    dataSource = "default";
+  }
+
+  function applyDefaults() {
+    const d = (DATA && DATA.defaults) || {};
+    applyInputs({
+      name: d.name || "",
+      gender: d.gender || "F",
+      age: d.age != null ? d.age : 39,
+      plan: d.plan || "",
+      basicPremiumUSD: d.basicPremiumUSD,
+      paymentYears: d.paymentYears,
+      cashValuesUSD: d.cashValuesUSD || {},
+      fx: d.fx || { USD: 1, HKD: 7.85 },
+    });
+    try {
+      const saved = localStorage.getItem(LS_INPUTS);
+      if (saved) applyInputs(JSON.parse(saved));
+    } catch (e) {}
+  }
+
+  function bind() {
+    ["inp-name", "inp-gender", "inp-age", "inp-plan", "inp-basic", "inp-years",
+      "cv-70", "cv-80", "cv-90", "cv-100", "inp-fx-usd", "inp-fx-hkd"].forEach(function (id) {
+      const el = $(id);
+      el.addEventListener("change", persistInputs);
+      el.addEventListener("input", persistInputs);
+    });
+    $("inp-plan").addEventListener("change", function () {
+      showErrors($("form-errors"), []);
+    });
+
+    $("btn-usd").addEventListener("click", function () { openCompare("USD"); });
+    $("btn-usd-text").addEventListener("click", function () { openCompare("USD"); });
+    $("btn-hkd").addEventListener("click", function () { openCompare("HKD"); });
+    $("btn-hkd-text").addEventListener("click", function () { openCompare("HKD"); });
+
+    function bindNav(id, fn) {
+      const el = $(id);
+      if (!el) return;
+      el.addEventListener("click", function (e) {
+        e.preventDefault();
+        fn();
+      });
+    }
+    bindNav("btn-admin", openAdmin);
+    bindNav("btn-back", goHome);
+    bindNav("btn-back-admin", goHome);
+
+    $("btn-print").addEventListener("click", function () { window.print(); });
+
+    $("inp-last-checked").addEventListener("change", function () {
+      if (this.value) applyLastChecked(this.value);
+    });
+
+    $("btn-add-plan").addEventListener("click", function () {
+      addPlan($("inp-new-plan").value);
+      $("inp-new-plan").value = "";
+    });
+    $("btn-rename-plan").addEventListener("click", function () {
+      renamePlan($("inp-rename-from").value, $("inp-rename-to").value);
+    });
+    $("btn-remove-plan").addEventListener("click", function () {
+      removePlan($("inp-rename-from").value);
+    });
+    $("inp-edit-plan").addEventListener("change", renderRateEditor);
+    $("rate-editor").addEventListener("change", onRateInput);
+    $("rate-editor").addEventListener("input", onRateInput);
+
+    $("btn-save-data").addEventListener("click", function () { saveToServer(); });
+    $("btn-download-json").addEventListener("click", function () {
+      persistDataLocal();
+      downloadText("premiums.json", JSON.stringify(DATA, null, 2), "application/json");
+    });
+    $("btn-download-js").addEventListener("click", function () {
+      persistDataLocal();
+      downloadText("data.js", dataJsPayload(DATA), "text/javascript");
+    });
+
+    $("btn-pick-xlsx").addEventListener("click", function () {
+      $("inp-xlsx").click();
+    });
+    $("inp-xlsx").addEventListener("change", function () {
+      const f = this.files && this.files[0];
+      $("xlsx-name").textContent = f ? f.name : "尚未選擇檔案";
+      $("btn-import-xlsx").disabled = !f;
+      pendingImport = null;
+      $("btn-apply-import").disabled = true;
+    });
+    $("btn-import-xlsx").addEventListener("click", function () {
+      const f = $("inp-xlsx").files && $("inp-xlsx").files[0];
+      if (f) importXlsx(f);
+    });
+    $("btn-apply-import").addEventListener("click", applyImport);
+
+    window.addEventListener("hashchange", route);
+    $("prospect-form").addEventListener("submit", function (e) { e.preventDefault(); });
+  }
+
+  async function init() {
+    await loadData();
+    refreshPlanDropdowns();
+    renderReminders();
+    applyDefaults();
+    updateLastCheckedDisplay();
+    updateDataSourceLabel();
+    bind();
+    route();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+
+  </script>
+</body>
+</html>
